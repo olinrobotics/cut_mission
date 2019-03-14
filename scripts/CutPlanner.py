@@ -67,6 +67,12 @@ class CutPlanner():
         #Send bladeplan along service
         return
 
+    def test_func(self):
+        print("I'm running!")
+        return
+
 if __name__ == "__main__":
+    rp.set_param('/scan_to_img/image_width', 100)
+    rp.set_param('/scan_to_img/scan_size', 720)
     cp = CutPlanner()
-    cp.plan_cut()
+    cp.test_func()

@@ -1,6 +1,7 @@
 def go(waypoints):
 	# do while loop
 	# while?(is it there)
+	#	publish "I'm at waypoint H"
 	# 	increment waypoint
 	# passonTwist
 	# while there are still waypoints left
@@ -17,6 +18,5 @@ def passOnTwist(currentOdom, nextWaypoint):
 	# maybe need to specify speed, but how?
 	# publish the twist? or ackermann to the MainState
 	# returns nothing
-
 def calculateVectorFromOdomToWaypoint(currentOdom,nextWaypoint):
 	# vector math

@@ -1,0 +1,4 @@
+nav_msgs/Path basepath
+sensor_msgs/Image raw_surface
+---
+nav_msgs/Path toolpath

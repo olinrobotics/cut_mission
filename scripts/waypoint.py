@@ -8,6 +8,7 @@ class Pathing():
 		self.odomSub = rospy.Subscriber("odom_topic", PoseStamped, self.odomCB)
 		self.twistPub = rospy.Publisher("clapback_twist", TwistStamped, queue_size=10)
 		self.statusPub = rospy.Publisher("waypoint_status", String?, queue_size=10)
+		self.threshold = 0.2
 		self.waypoints = None
 		self.odom = None
 	def waypointCB(self, data):
@@ -17,7 +18,20 @@ class Pathing():
 		self.odom = data
 
 	def go(self):
-		while(self.isItThere()):
+		while(!self.isItThere()):
+			self.passOnTwist()
+		self.statusPub.publish()
+
+	def isItThere(self):
+		vector = self.calculateVectorFromOdomToWaypoint()
+		if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
+			return True
+		else:
+			return False
+
+	def passOnTwist(self):
+		vector = self.calculateVectorFromOdomToWaypoint()
+		
 
 
 def go(waypoints):
@@ -36,7 +50,6 @@ def isitThere(currentOdom, nextWaypoint):
 def passOnTwist(currentOdom, nextWaypoint):
 	# something like:
 	# calculate the vector from odom to the waypoint
-	# do trig to calc the steering angle
 	# maybe need to specify speed, but how?
 	# publish the twist? or ackermann to the MainState
 	# returns nothing

@@ -1,3 +1,25 @@
+import rospy
+
+
+class Pathing():
+	def __init__(self):
+		rospy.init_node("pathing")
+		self.waypointSub = rospy.Subscriber("waypoints", WaypointMSG, self.waypointCB)
+		self.odomSub = rospy.Subscriber("odom_topic", PoseStamped, self.odomCB)
+		self.twistPub = rospy.Publisher("clapback_twist", TwistStamped, queue_size=10)
+		self.statusPub = rospy.Publisher("waypoint_status", String?, queue_size=10)
+		self.waypoints = None
+		self.odom = None
+	def waypointCB(self, data):
+		self.waypoints = data
+
+	def odomCB(self,data):
+		self.odom = data
+
+	def go(self):
+		while(self.isItThere()):
+
+
 def go(waypoints):
 	# do while loop
 	# while?(is it there)

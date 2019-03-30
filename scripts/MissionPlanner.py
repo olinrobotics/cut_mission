@@ -118,6 +118,7 @@ class MissionPlanner:
         while not rospy.is_shutdown():
             rospy.spin()
 
+
 class behavior:
 
     def __init__(self, name):

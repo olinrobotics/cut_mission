@@ -9,7 +9,7 @@ waypoints:
     index: 0
     point: {x: 0, y: 0, z: 0}
     frame: map
-    behavior: scan
+    behavior: 
     direction: forward
     autocontinue: false
   1:

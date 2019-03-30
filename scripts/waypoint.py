@@ -1,5 +1,5 @@
 import rospy
-
+import math
 
 class Pathing():
 	def __init__(self):
@@ -9,6 +9,7 @@ class Pathing():
 		self.twistPub = rospy.Publisher("clapback_twist", TwistStamped, queue_size=10)
 		self.statusPub = rospy.Publisher("waypoint_status", String?, queue_size=10)
 		self.threshold = 0.2
+		self.speed = 0.75
 		self.waypoints = None
 		self.odom = None
 	def waypointCB(self, data):
@@ -31,8 +32,10 @@ class Pathing():
 
 	def passOnTwist(self):
 		vector = self.calculateVectorFromOdomToWaypoint()
-		
-
+		newTwist = Twist()
+		newTwist.linear.x = self.speed
+		newTwist.angular.z = math.atan2(vector.y/vector.x)
+		twistPub.publish(newTwist)
 
 def go(waypoints):
 	# do while loop

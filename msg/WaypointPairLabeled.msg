@@ -1,3 +1,3 @@
 uint8 label
-cut_planner/Waypoint waypoint1
-cut_planner/Waypoint waypoint2
+cut_mission/Waypoint waypoint1
+cut_mission/Waypoint waypoint2

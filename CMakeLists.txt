@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(cut_planner)
+project(cut_mission)
 
 find_package(catkin REQUIRED
   roscpp
@@ -47,7 +47,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES cut_planner
+#  LIBRARIES cut_mission
    CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )

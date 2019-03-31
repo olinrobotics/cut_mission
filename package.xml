@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>cut_planner</name>
+  <name>cut_mission</name>
   <version>0.0.0</version>
-  <description>A package for dirt machining blade path planning</description>
+  <description>A package for the spring 2019 dirt machining project</description>
   <maintainer email="olingravl@gmail.com">cnovak</maintainer>
   <license>MIT</license>
 

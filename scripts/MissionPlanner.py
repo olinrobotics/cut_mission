@@ -3,6 +3,7 @@
 import rospy
 import yaml
 from std_msgs.msg import String, Int16
+from cut_planner.msg import Waypoint, WaypointPairLabeled
 
 class MissionPlanner:
     """ @brief executes mission from mission file
@@ -14,18 +15,21 @@ class MissionPlanner:
     def __init__(self):
 
         # Set up mission
-        self.load_mission('../missions/p2p_test.yaml')
+        self.load_mission('../config/p2p_test.yaml')
         self.print_mission()
         self.curr_waypoint = None
 
         # Set up ros stuff
         rospy.init_node('mission_planner')
         self.state_pub = rospy.Publisher('/state_controller/cmd_state', String, queue_size=1)
+        self.wppair_pub = rospy.Publisher('/mission_planner/cmd_wppair', WaypointPairLabeled, queue_size=1)
         rospy.Subscriber('/mission_planner/cmd_behavior', Int16, self.wp_pass_cb)
 
+        self.behaviors = {}
+        self.update_behaviors()
         self.start_mission()
 
-    def cmd_behavior_cb(self, msg):
+    def wp_pass_cb(self, msg):
         """ @brief end segment if reached wp is next in mission
             """
         if msg.data == self.curr_waypoint.get_index() + 1 and len(self.waypoints) > msg.data:
@@ -78,6 +82,20 @@ class MissionPlanner:
             print("Execute " + self.waypoints[-1].behavior + " at " + str(self.waypoints[-1].index))
         except AttributeError as e:
             print("No mission loaded yet. Error: " + str(e))
+
+    def update_behaviors(self):
+        ''' @brief Updates behavior parameters
+            updateBehaviors checks the behavior namespace on the parameter server and
+            populates behavior_list with the behaviors listed there.
+            TODO: Ensure no duplicates in behavior vector
+            '''
+
+        temp_list = rospy.get_param('/behaviors')
+        if len(temp_list) > 0:
+            # Populate behavior list with parameter-defined behaviors
+            for behavior in temp_list:
+                self.behaviors[behavior] = temp_list[behavior]
+                print("Found behavior " + behavior + " with id " + str(temp_list[behavior]))
 
     def next_behavior(self):
         """ @brief end current behavior, setup & start next behavior

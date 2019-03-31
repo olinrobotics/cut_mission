@@ -14,23 +14,25 @@ class MissionPlanner:
     def __init__(self):
 
         # Set up mission
-        self.load_mission('../missions/single_cut.yaml')
+        self.load_mission('../missions/p2p_test.yaml')
         self.print_mission()
         self.curr_waypoint = None
 
         # Set up ros stuff
         rospy.init_node('mission_planner')
         self.state_pub = rospy.Publisher('/state_controller/cmd_state', String, queue_size=1)
-        rospy.Subscriber('/mission_planner/wp_pass', Int16, self.wp_pass_cb)
+        rospy.Subscriber('/mission_planner/cmd_behavior', Int16, self.wp_pass_cb)
 
         self.start_mission()
 
-    def wp_pass_cb(self, msg):
+    def cmd_behavior_cb(self, msg):
         """ @brief end segment if reached wp is next in mission
             """
-
-        if msg.data == self.curr_waypoint.get_index() + 1:
+        if msg.data == self.curr_waypoint.get_index() + 1 and len(self.waypoints) > msg.data:
+            print("Recieved next waypoint")
             self.next_behavior()
+        else:
+            print("Recieved incorrect waypoint")
 
     def load_mission(self, file):
         """ @brief load waypoints into list attr
@@ -55,8 +57,15 @@ class MissionPlanner:
             @param[in] init_wp: index of starting waypoint; defaults to 0
             """
         self.current_waypoint = self.waypoints[init_wp]
+        print("Starting mission: " + self.mission)
         self.setup_behavior(self.current_waypoint)
         self.run_behavior(self.current_waypoint)
+        return
+
+    def end_mission(self):
+        """ @brief end mission, log necessary information
+            """
+        self.current_waypoint = None
         return
 
     def print_mission(self):
@@ -73,12 +82,11 @@ class MissionPlanner:
     def next_behavior(self):
         """ @brief end current behavior, setup & start next behavior
             """
-        self.end_segment(self.current_waypoint)
-
+        self.end_behavior(self.current_waypoint)
         try:
             self.current_waypoint = self.waypoints[self.current_waypoint.index + 1]
-            self.setup_segment(self.current_waypont)
-            self.run_segment(self.current_waypoint)
+            self.setup_behavior(self.current_waypoint)
+            self.run_behavior(self.current_waypoint)
             return
 
         except IndexError as e:
@@ -94,11 +102,13 @@ class MissionPlanner:
         msg = String()
         msg.data = waypoint.get_behavior()
         self.state_pub.publish(msg)
+        print("Setting up behavior: " + msg.data)
         # TODO:run behavior start function
         self.curr_waypoint = waypoint
         return
 
     def run_behavior(self, waypoint):
+        print("   Running behavior: " + waypoint.get_behavior())
         pass
 
     def end_behavior(self, waypoint):
@@ -108,7 +118,8 @@ class MissionPlanner:
 
         # TODO:run behavior end function
         self.state_pub.publish(String('safety'))
-        if not self.curr_wp.get_autocontinue():
+        print("    Ending behavior: " + waypoint.get_behavior())
+        if not self.current_waypoint.get_autocontinue():
             pass
             #TODO Add pause for user input here
 

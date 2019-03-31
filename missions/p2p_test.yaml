@@ -16,6 +16,6 @@ waypoints:
     index: 1
     point: {x: 100, y: 100, z: 20}
     frame: odom
-    behavior: end
+    behavior: safety
     direction: none
     autocontinue: none

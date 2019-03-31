@@ -20,6 +20,13 @@ add_service_files(
  CutPlan.srv
 )
 
+# Generate messages in the 'msg' folder
+add_message_files(
+ FILES
+ Waypoint.msg
+ WaypointPairLabeled.msg
+)
+
 # Generate added messages and services with any dependencies listed here
 generate_messages(
   DEPENDENCIES

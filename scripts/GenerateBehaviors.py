@@ -3,7 +3,7 @@ import rospy
 import yaml
 import os
 
-mission_file = '../config/single_cut.yaml'
+mission_file = '../config/p2p_test.yaml'
 behavior_file = '../config/behaviors.yaml'
 behaviors = []
 

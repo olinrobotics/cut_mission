@@ -2,7 +2,8 @@
 
 import rospy
 import yaml
-from std_msgs.msg import String, Int16, Header
+import time
+from std_msgs.msg import String, UInt8, Header
 from cut_planner.msg import Waypoint, WaypointPairLabeled
 
 class MissionPlanner:
@@ -16,17 +17,19 @@ class MissionPlanner:
 
         # Set up ros stuff
         rospy.init_node('mission_planner')
-        self.state_pub = rospy.Publisher('/state_controller/cmd_state', String, queue_size=1)
+        self.state_pub = rospy.Publisher('/state_controller/cmd_state', UInt8, queue_size=1)
         self.behavior_pub = rospy.Publisher('/mission_planner/out_behavior', WaypointPairLabeled, queue_size=1)
-        rospy.Subscriber('/mission_planner/in_behavior', Int16, self.in_behavior_cb)
+        rospy.Subscriber('/mission_planner/in_behavior', UInt8, self.in_behavior_cb)
 
         # Set up mission
-        self.load_mission('../config/p2p_test.yaml')
+        time.sleep(0.5)
+        self.load_mission(rospy.get_param('/cut_mission/mission_file'))
         self.curr_waypoint = None
 
         # Get behaviors - start mission if no errors
         self.behaviors = {}
         if not self.update_behaviors():
+            time.sleep(0.5)
             self.start_mission()
         else:
             return
@@ -150,8 +153,8 @@ class MissionPlanner:
             msg.waypoint2 = msg.waypoint1
         rospy.loginfo("| Starting behavior: " + msg.waypoint1.behavior + ", index: " + str(msg.label))
 
-        msg_state = String()
-        msg_state.data = str(msg.label)
+        msg_state = UInt8()
+        msg_state.data = msg.label
         self.state_pub.publish(msg_state)
         self.behavior_pub.publish(msg)
         return
@@ -162,7 +165,7 @@ class MissionPlanner:
             """
 
         # TODO:run behavior end function
-        self.state_pub.publish(String('safety'))
+        self.state_pub.publish(self.behaviors['safety'])
         rospy.loginfo("| Ending behavior: " + self.waypoints[wp_index].behavior)
         if not self.waypoints[wp_index].autocontinue:
             pass

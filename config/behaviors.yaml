@@ -1,6 +1,4 @@
 # Autogen behavior file from GenerateBehaviors.py
 # behaviors/[name_of_behavior]: '[priority]'
-/behaviors/cut: 2
-/behaviors/p2p: 1
-/behaviors/safety: 3
-/behaviors/scan: 0
+/behaviors/p2p: 0
+/behaviors/safety: 1

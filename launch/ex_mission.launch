@@ -1,0 +1,13 @@
+<launch>
+    <!-- Load behaviors  -->
+    <rosparam command="load" file="$(find cut_mission)/config/behaviors.yaml" />
+
+    <!-- Start state controller -->
+    <node pkg="midbrain_sc" type="MainState" name="mid_brain" output="screen" launch-prefix="gnome-terminal --command"/>
+
+    <!-- Start mission planner -->
+    <node pkg="cut_mission" type="MissionPlanner.py" name="cut_mission" output="screen">
+      <param name="mission_file" value="$(find cut_mission)/config/p2p_test.yaml"/>
+    </node>
+
+</launch>

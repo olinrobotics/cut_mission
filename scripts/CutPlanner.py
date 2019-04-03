@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 
 import rospy as rp
+import numpy as np
 import helper_functions as hf
+
+# Import ROS msgs
 from cut_planner.srv import CutPlan
 from sensor_msgs.msg import Image
 from std_msgs.msg import Header
@@ -10,13 +13,14 @@ from nav_msgs.msg import Path
 class CutPlanner():
 
     def __init__(self):
-        """
-        @brief initialize ros constructs, start service
-        """
+        """@brief initialize ros constructs, start service
+            """
         rp.init_node('cut_planner')
         self.service = rp.Service('plan_bladepass', CutPlan, self.handle_cut_operation)
         self.imwidth = hf.get_param_safe('/scan_to_img/image_width')
         self.imheight = hf.get_param_safe('/scan_to_img/scan_size')
+        self.bladewidth = 1.0 #meters
+        self.maxcut = 0.1 #meters
 
     def handle_cut_operation(self, req):
         print("got a request!")
@@ -26,7 +30,9 @@ class CutPlanner():
         """ @brief filter scan image
             @param[in] ROS Image raw scan
             @return ROS Image filtered scan
-        """
+            """
+
+        # TODO actually filter image
         return img
 
     def plan_cutsurface(self, img_scan, img_cut):
@@ -35,6 +41,14 @@ class CutPlanner():
             @param[in] ROS Image final cut surface
             @return ROS Image planned cut surface
             """
+
+        # Approach 1: Take max cut depth across surface up to final surface
+        for pixel in img:
+            #if pixel in blade path:
+            if pixel - pixel_cut <= max_depth:
+                pixel = pixel_cut
+            else:
+                pixel = pixel - max_depth
         return img
 
     def plan_bladeposes(self, img, path):

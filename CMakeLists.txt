@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(cut_planner)
+project(cut_mission)
 
 find_package(catkin REQUIRED
   roscpp
@@ -20,9 +20,11 @@ add_service_files(
  CutPlan.srv
 )
 
+# Generate messages in the 'msg' folder
 add_message_files(
  FILES
  Waypoint.msg
+ WaypointPairLabeled.msg
 )
 
 # Generate added messages and services with any dependencies listed here
@@ -45,7 +47,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-#  LIBRARIES cut_planner
+#  LIBRARIES cut_mission
    CATKIN_DEPENDS message_runtime
 #  DEPENDS system_lib
 )

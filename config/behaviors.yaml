@@ -1,4 +1,5 @@
 # Autogen behavior file from GenerateBehaviors.py
 # behaviors/[name_of_behavior]: '[priority]'
-/behaviors/p2p: 0
-/behaviors/safety: 1
+/behaviors/p2p: '2'
+/behaviors/safety: '0'
+/behaviors/teleop: '1'

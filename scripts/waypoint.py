@@ -8,7 +8,7 @@ class Pathing():
 		self.waypoint2 = waypoint2
 		self.odomSub = rospy.Subscriber("odom_topic", PoseStamped, self.odomCB)
 		self.twistPub = rospy.Publisher("clapback_twist", TwistStamped, queue_size=10)
-		self.statusPub = rospy.Publisher("waypoint_status", String?, queue_size=10)
+		self.statusPub = rospy.Publisher("waypoint_status", String, queue_size=10)
 		self.threshold = 0.2
 		self.speed = 0.75
 		self.waypoints = None
@@ -18,21 +18,21 @@ class Pathing():
 		self.odom = data
 
 	def go(self):
-		while(!self.isItThere()):
-			self.passOnTwist()
+		# while(!self.isItThere()):
+		self.passOnTwist()
 		self.statusPub.publish()
 
-	def isItThere(self):
-		vector = self.OdomToWaypoint()
-		if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
-			return True
-		else:
-			return False
+	# def isItThere(self):
+	# 	vector = self.OdomToWaypoint()
+	# 	if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
+	# 		return True
+	# 	else:
+	# 		return False
 
-	def odomToWaypoint(self):
-		vector.y = self.waypoint2.y - self.odom.y
-		vector.x = self.waypoint2.x - self.odom.x
-		return vector
+	# def odomToWaypoint(self):
+	# 	vector.y = self.waypoint2.y - self.odom.y
+	# 	vector.x = self.waypoint2.x - self.odom.x
+	# 	return vector
 
 	def passOnTwist(self):
 		vector = self.waypointsToVectors()
@@ -52,13 +52,13 @@ class Pathing():
 			vector.x = self.waypoint2.x - self.waypoint1.x + distance * (self.waypoint2.y - self.waypoint1.y)	
 			return vector	
 
-	
+
 	def onTheLine(self):
 		distance = self.distanceToLine()
 		if(math.abs(distance) < self.threshold):
 			return True
 		else:
-			return False	
+			return False		
 
 	def distanceToLine(self):
 		x1 = self.waypoint1.x

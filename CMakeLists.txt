@@ -11,6 +11,8 @@ find_package(catkin REQUIRED
   nav_msgs
   sensor_msgs
   message_generation
+	laser_geometry
+	tf
 )
 
 ################################################

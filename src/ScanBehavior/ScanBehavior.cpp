@@ -2,7 +2,6 @@
 #include "ScanBehavior.h"
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
-#include <sensor_msgs/PointCloud.h>
 #include <cut_mission/WaypointPairLabeled.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
@@ -13,12 +12,12 @@
 ScanBehavior::ScanBehavior()
  : rate(ros::Rate(5))
  , scan_sub(n.subscribe("/scan", 1, &ScanBehavior::ScanBehavior::scanCB, this))
- , waypoint_sub(n.subscribe("/temp_behavior", 1, &ScanBehavior::ScanBehavior::waypointPairCB, this))
+ , waypoint_sub(n.subscribe("/mission_planner/cmd_waypoints", 1, &ScanBehavior::ScanBehavior::waypointPairCB, this))
  , twist_pub(n.advertise<state_controller::TwistLabeled>("/state_controller/cmd_behavior_twist", 1))
  , filename("")
  , is_running(false)
  , frame_id("None")
- , label("scan"){
+ , label("scan") {
 
    // Ensure filename parameter is properly loaded
    n.getParam("/scan_behavior/file_name", filename);

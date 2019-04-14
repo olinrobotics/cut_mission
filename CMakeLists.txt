@@ -12,6 +12,7 @@ find_package(catkin REQUIRED
   sensor_msgs
   message_generation
 	laser_geometry
+  laser_assembler
 	tf
 )
 

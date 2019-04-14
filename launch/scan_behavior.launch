@@ -1,5 +1,6 @@
 <launch>
 
+  <!-- http://wiki.ros.org/laser_assembler -->
   <node type="laser_scan_assembler" pkg="laser_assembler" name="pc_assembler">
     <!--<remap from="scan" to="tilt_scan"/>-->
     <param name="max_scans" type="int" value="400" />
@@ -7,6 +8,8 @@
   </node>
 
   <node pkg="cut_mission" type="ScanBehavior" name="scan_behavior" output="screen">
+    <remap from="/waypoints" to="/mission_planner/cmd_waypoints"/>
+    <remap from="/twist" to="/state_controller/cmd_behavior_twist"/>
     <param name="file_name" value="$(find cut_mission)/config/test.txt"/>
   </node>
 

@@ -11,7 +11,7 @@
 #include <laser_assembler/AssembleScans.h>
 
 ScanBehavior::ScanBehavior()
- : rate(ros::Rate(5))
+ : rate(ros::Rate(15))
  , scan_sub(n.subscribe("/scan", 1, &ScanBehavior::ScanBehavior::scanCB, this))
  , waypoint_sub(n.subscribe("/waypoints", 1, &ScanBehavior::ScanBehavior::waypointPairCB, this))
  , twist_pub(n.advertise<state_controller::TwistLabeled>("/twist", 1))
@@ -39,24 +39,25 @@ void ScanBehavior::scanCB(const sensor_msgs::LaserScan& msg) {
   // Transformations done referencing https://wiki.ros.org/laser_pipeline/Tutorials/IntroductionToWorkingWithLaserScannerData
   // https://wiki.ros.org/tf/Tutorials/Using%20Stamped%20datatypes%20with%20tf%3A%3AMessageFilter
 
-  //
-  // if (is_running) {
-  //   sensor_msgs::PointCloud cloud;
-  //   try {
-  //     projecter->transformLaserScanToPointCloud("odom", msg, cloud, *tf_listener);
-  //   } catch (tf::TransformException& e) {
-  //       std::cout<<e.what()<<std::endl;
-  //       return;
-  //   }
-  //
-  //   std::cout<<cloud.points[0].x<<std::endl;
-  //
-  //   for (int i = 0; i<msg.ranges.size(); i++) {
-  //     file<<msg.ranges[i]<<" ";
-  //   }
-  // file<<std::endl;
-  // return;
-  // }
+
+  if (is_running) {
+    sensor_msgs::PointCloud cloud;
+    try {
+      tf_listener->waitForTransform("/hokuyo", "/odom", ros::Time::now(), ros::Duration(0.05));
+      projecter->transformLaserScanToPointCloud("odom", msg, cloud, *tf_listener);
+    } catch (tf::TransformException& e) {
+        std::cout<<e.what()<<std::endl;
+        return;
+    }
+
+    std::cout<<cloud.points[0].x<<std::endl;
+
+    for (int i = 0; i<msg.ranges.size(); i++) {
+      file<<msg.ranges[i]<<" ";
+    }
+  file<<std::endl;
+  return;
+  }
   return;
 }
 
@@ -127,10 +128,10 @@ int ScanBehavior::runHalt() {
   is_running = false;
   buildcloud_srv.request.end = ros::Time::now();
   file.close();
-  printf(buildcloud_srv.request);
+  //printf(buildcloud_srv.request);
 
   if (srv_client.call(buildcloud_srv))
-    printf("Got cloud with %u points\n", buildcloud_srv.response.cloud.points.size());
+    printf("Got cloud with %u points\n", int(buildcloud_srv.response.cloud.points.size()));
   else
     printf("Service call failed\n");
   return 0;

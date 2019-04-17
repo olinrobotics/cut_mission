@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
+import pathing
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
 from midbrain_sc.msg import TwistLabeled
@@ -41,6 +42,7 @@ class P2PBehavior:
                 self.is_active = True
                 self.wp_1 = msg.waypoint1
                 self.wp_2 = msg.waypoint2
+                self.pathFinder = Pathing(self.wp_1, self.wp_2)
 
     def check_arrival(self):
         ''' @brief Check for arrival at attr waypoint_2
@@ -64,7 +66,7 @@ class P2PBehavior:
                 if not self.check_arrival():
                     msg = TwistLabeled()
                     msg.label = '0'
-                    # Update navigation vector, call to Nathan
+                    msg.twist = self.pathFinder.getCurrentTwist()
                     self.twist_pub.publish(msg)
 
                 else:

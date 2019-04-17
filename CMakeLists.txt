@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(cut_mission)
 
+## Compile as C++11, supported in ROS Kinetic and newer
+set(CMAKE_CXX_FLAGS "-std=c++11")
+
 find_package(catkin REQUIRED
   roscpp
   rospy
@@ -8,6 +11,8 @@ find_package(catkin REQUIRED
   nav_msgs
   sensor_msgs
   message_generation
+	laser_geometry
+	tf
 )
 
 ################################################
@@ -59,6 +64,11 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-# ${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
 )
+
+add_executable( ScanBehavior src/ScanBehavior/ScanBehavior.cpp )
+
+target_link_libraries( ScanBehavior ${catkin_LIBRARIES} )
+
+add_dependencies( ScanBehavior ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

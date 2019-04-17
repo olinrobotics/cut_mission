@@ -1,4 +1,4 @@
-uint16 index
+int64 index
 geometry_msgs/Point point
 std_msgs/String behavior
 std_msgs/Bool forward

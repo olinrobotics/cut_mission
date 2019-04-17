@@ -1,0 +1,5 @@
+<launch>
+    <node pkg="cut_mission" type="ScanBehavior" name="scan_behavior" output="screen">
+      <param name="file_name" value="$(find cut_mission)/config/test.txt"/>
+    </node>
+</launch>

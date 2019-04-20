@@ -42,7 +42,6 @@ class P2PBehavior:
                 self.is_active = True
                 self.wp_1 = msg.waypoint1
                 self.wp_2 = msg.waypoint2
-                self.pathFinder = Pathing(self.wp_1, self.wp_2)
 
     def check_arrival(self):
         ''' @brief Check for arrival at attr waypoint_2
@@ -50,7 +49,7 @@ class P2PBehavior:
             '''
         rospy.wait_for_service('checkArrival')
         try:
-            checkArrival = rospy.ServiceProxy('checkArrival', checkArrival)
+            checkArrival = rospy.ServiceProxy('checkArrival', CheckArrival)
             response = checkArrival(self.wp1, self.wp2)
             return response.arrived
         except rospy.ServiceException, e:

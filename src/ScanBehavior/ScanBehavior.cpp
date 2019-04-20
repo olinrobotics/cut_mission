@@ -63,7 +63,7 @@ void ScanBehavior::scanCB(const sensor_msgs::LaserScan& msg) {
 
 void ScanBehavior::waypointPairCB(const cut_mission::WaypointPairLabeled& msg) {
   // If msg has behavior label, start the behavior
-  if (label == msg.waypoint1.behavior) {
+  if (label == msg.waypoint1.behavior.data) {
     if (runInit(msg, "")) ROS_WARN("%s - Unable to initialize behavior", label.c_str());
   } else {
     if (runHalt()) ROS_WARN("%s - Unable to halt behavior", label.c_str());

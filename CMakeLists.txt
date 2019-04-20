@@ -25,6 +25,7 @@ add_service_files(
  FILES
  CutPlan.srv
  GetCurrTwist.srv
+ CheckArrival.srv
 )
 
 # Generate messages in the 'msg' folder

@@ -1,9 +1,11 @@
+#!/usr/bin/env python
 import rospy
 import math
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
 import tf
-from checkArrival.srv import *
+from cut_mission.srv import *
+
 
 class Pathing():
 	def __init__(self):

@@ -31,6 +31,7 @@ private:
   laser_geometry::LaserProjection* projecter;
   tf::TransformListener* tf_listener;
   std::string filename;
+  std::string datatype;
   std::ofstream file;
   bool is_running;
   std::string frame_id;

@@ -23,6 +23,9 @@ ScanBehavior::ScanBehavior()
 
    // Ensure filename parameter is properly loaded
    n.getParam("/scan_behavior/file_name", filename);
+   n.getParam("/scan_behavior/datatype", datatype);
+
+
    if (filename == "") {
      ROS_ERROR("ScanBehavior: cannot find /scan_behavivor/file_name parameter - did you run the launch file?");
      ros::shutdown();
@@ -50,16 +53,14 @@ void ScanBehavior::scanCB(const sensor_msgs::LaserScan& msg) {
         return;
     }
 
-    std::cout<<cloud.points[0].x<<std::endl;
-
-    for (int i = 0; i<msg.ranges.size(); i++) {
-      file<<msg.ranges[i]<<" ";
+    for (int i = 0; i<cloud.points.size(); i++) {
+      file<<"("<<cloud.points[i].x<<","<<cloud.points[i].y<<","<<cloud.points[i].z<<")";
     }
-  file<<std::endl;
-  return;
+    file<<std::endl;
+    return;
   }
   return;
-}
+  }
 
 void ScanBehavior::waypointPairCB(const cut_mission::WaypointPairLabeled& msg) {
   // If msg has behavior label, start the behavior

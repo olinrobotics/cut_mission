@@ -17,6 +17,11 @@ class Pathing():
 	def odomCB(self,data):
 		self.odom = data
 
+	def handleWaypointSrv(self, req):
+		# Updates pathing waypoint attributes, and replies with calculated twist given waypoints
+		self.waypoint1 = req.waypoint1
+		self.waypoint2 = req.waypoint2
+
 	def getCurrentTwist(self):
 		# while(!self.isItThere()):
 		return self.passOnTwist()

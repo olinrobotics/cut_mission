@@ -23,6 +23,7 @@ find_package(catkin REQUIRED
 add_service_files(
  FILES
  CutPlan.srv
+ GetWPVec.srv
 )
 
 # Generate messages in the 'msg' folder

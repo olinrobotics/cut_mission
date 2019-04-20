@@ -8,7 +8,7 @@ from checkArrival.srv import *
 class Pathing():
 	def __init__(self):
 		rospy.init_node("pathing")
-		self.s = rospy.Service('getCurrentTwist', getCurrentTwist, getCurrentTwist)
+		# self.s = rospy.Service('getCurrentTwist', getCurrentTwist, getCurrentTwist)
 		self.s = rospy.Service('checkArrival', checkArrival, checkArrival)
 		waypoint1 = None
 		waypoint2 = None

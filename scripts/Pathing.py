@@ -8,7 +8,7 @@ from checkArrival.srv import *
 class Pathing():
 	def __init__(self):
 		rospy.init_node("pathing")
-		# self.s = rospy.Service('getCurrentTwist', getCurrentTwist, getCurrentTwist)
+		self.s = rospy.Service('getCurrentTwist', GetCurrTwist, self.getCurrentTwist)
 		self.s = rospy.Service('checkArrival', checkArrival, checkArrival)
 		waypoint1 = None
 		waypoint2 = None
@@ -16,11 +16,6 @@ class Pathing():
 		self.threshold = 0.2	# Dist from path to count as on path (m)
 		self.speed = 0.75		# Percentage velocity (1)
 		rospy.spin()
-
-	def handleWaypointSrv(self, req):
-		# Updates pathing waypoint attributes, and replies with calculated twist given waypoints
-		self.waypoint1 = req.waypoint1
-		self.waypoint2 = req.waypoint2
 
 	def isItThere(self, req):
 		vector = self.OdomToWaypoint(req.wp2)

@@ -24,7 +24,7 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
  FILES
  CutPlan.srv
- GetWPVec.srv
+ GetCurrTwist.srv
 )
 
 # Generate messages in the 'msg' folder

@@ -16,13 +16,24 @@ class Pathing():
 		self.speed = 0.75		# Percentage velocity (1)
 		rospy.spin()
 
-	def isItThere(self, req):
-		waypoint2 = req.b
-		vector = self.OdomToWaypoint(waypoint2)
-		if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
-			return checkArrivalResponse(True)
-		else:
-			return checkArrivalResponse(False)
+	def odomCB(self,data):
+		self.odom = data
+
+	def handleWaypointSrv(self, req):
+		# Updates pathing waypoint attributes, and replies with calculated twist given waypoints
+		self.waypoint1 = req.waypoint1
+		self.waypoint2 = req.waypoint2
+
+	def getCurrentTwist(self):
+		# while(!self.isItThere()):
+		return self.passOnTwist()
+
+	# def isItThere(self):
+	# 	vector = self.OdomToWaypoint()
+	# 	if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
+	# 		return True
+	# 	else:
+	# 		return False
 
 	def odomToWaypoint(self, waypoint2):
 		vector.y = waypoint2.y - self.odom.y

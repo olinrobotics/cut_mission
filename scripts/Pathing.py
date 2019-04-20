@@ -3,6 +3,7 @@ import math
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
 import tf
+from checkArrival.srv import *
 
 class Pathing():
 	def __init__(self):
@@ -24,9 +25,9 @@ class Pathing():
 	def isItThere(self, req):
 		vector = self.OdomToWaypoint(req.wp2)
 		if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
-			return True
+			return checkArrivalResponse(True)
 		else:
-			return False
+			return checkArrivalResponse(False)
 
 	def odomToWaypoint(self, waypoint2):
 		vector.y = waypoint2.y - self.odom.y

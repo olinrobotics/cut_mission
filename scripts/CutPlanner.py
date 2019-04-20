@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 
-import rospy as rp
-import numpy as np
+import rospy
+import numpy
 import helper_functions as hf
 
 # Import ROS msgs
-from cut_planner.srv import CutPlan
+from cut_mission.srv import CutPlan
 from std_msgs.msg import Header
 from nav_msgs.msg import Path
 
@@ -14,8 +14,8 @@ class CutPlanner():
     def __init__(self):
         """@brief initialize ros constructs, start service
             """
-        rp.init_node('cut_planner')
-        self.service = rp.Service('plan_bladepass', CutPlan, self.handle_cut_operation)
+        rospy.init_node('cut_planner')
+        self.service = rospy.Service('plan_bladepass', CutPlan, self.handle_cut_operation)
         self.file_location = hf.get_param_safe('/scan_to_img/file_location')
         self.blade_width = 1.0 #meters
         self.max_cut = 0.1 #meters
@@ -23,7 +23,8 @@ class CutPlanner():
     def handle_cut_operation(self, req):
         # Run plan cut on data in given file, return cut path
         #TODO implement properly
-        print("got a request!")
+        rospy.loginfo("cutplan - request for cut plan given file %s", req)
+        self.plan_cut(req)
         return CutPlanResponse(Path())
 
     def load_data(self, file):
@@ -31,7 +32,8 @@ class CutPlanner():
             @param[in] file: filepath to data file from scan
             @param[out]: initialize filtered data
             """
-            pass
+        rospy.loginfo("cutplan - loading data from file %s", file)
+        pass
 
     def filter_data(self, data):
         """ @brief filter scan data in class attribute
@@ -40,6 +42,7 @@ class CutPlanner():
             """
 
         # TODO actually filter image
+        rospy.loginfo("cutplan - filtering scan & position data")
         pass
 
     def plan_cutsurface(self, data_surf, data_final):
@@ -48,7 +51,7 @@ class CutPlanner():
             @param[in] 1D array representing final surface x-sec
             @return 1D array representing next cut surface x-sec
             """
-
+        rospy.loginfo("cutplan - calculating next cutsurface")
         # Verify input arrays are equal length
         if not len(data_surf) == len(data_final):
             rospy.logerror("plan_cutsurface(): scan length doesn't match planned cut length")
@@ -70,6 +73,8 @@ class CutPlanner():
             @param[in] ROS Path base_link poses
             @return ROS Path blade poses
             """
+
+        rospy.loginfo("cutplan - calculating bladepath for cutsurface")
         pass
 
     def check_bladeposes(self, base_path, blade_path):
@@ -78,29 +83,29 @@ class CutPlanner():
             @param[in] ROS Path blade poses
             @return ROS Path checked blade poses
             """
+        rospy.loginfo("cutplan - verifying feasibility of bladebath")
         return blade_path
 
-    def plan_cut(self, file_path, base_path):
+    def plan_cut(self, file_path):
         """ @brief main function - generate blade path plan from dataset
-            @param[in]
-            @param[in] ROS Path base_link poses
+            @param[in] File containing localized scans and base link poses
             @return ROS Path verified blade poses
             """
 
         self.load_data(file_path)
-        img_filt = filter_img(self.scan_data)
-        cutsurface = plan_cutsurface(img_filt)
-        bladeplan = plan_bladeposes(cutsurface, path)
-        bladeplan = check_bladeposes(path, bladeplan)
+        img_filt = self.filter_data(self.scan_data)
+        cutsurface = self.plan_cutsurface(img_filt)
+        bladeplan = self.plan_bladeposes(cutsurface, path)
+        bladeplan = self.check_bladeposes(path, bladeplan)
         #Send bladeplan along service
         return blade_path
 
-    def test_func(self):
-        print("I'm running!")
-        return
+    def spin(self):
+        # Keeps service running
+        while not rospy.is_shutdown():
+            rospy.spin()
 
 if __name__ == "__main__":
-    rp.set_param('/scan_to_img/image_width', 100)
-    rp.set_param('/scan_to_img/scan_size', 720)
+    rospy.set_param('/scan_to_img/file_location', "$(find cut_mission)/config/test.txt")
     cp = CutPlanner()
-    cp.test_func()
+    cp.spin()

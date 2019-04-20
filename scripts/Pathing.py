@@ -7,7 +7,7 @@ import tf
 class Pathing():
 	def __init__(self):
 		rospy.init_node("pathing")
-		self.s = rospy.Service('getCurrentTwist', getCurrentTwist, getCurrentTwist)
+		self.s = rospy.Service('getCurrentTwist', GetCurrTwist, self.handleTwistSrv)
 		self.s = rospy.Service('checkArrival', checkArrival, checkArrival)
 		waypoint1 = None
 		waypoint2 = None
@@ -19,7 +19,7 @@ class Pathing():
 	def odomCB(self,data):
 		self.odom = data
 
-	def handleWaypointSrv(self, req):
+	def handleTwistSrv(self, req):
 		# Updates pathing waypoint attributes, and replies with calculated twist given waypoints
 		self.waypoint1 = req.waypoint1
 		self.waypoint2 = req.waypoint2

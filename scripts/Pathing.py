@@ -3,16 +3,16 @@ import math
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
 import tf2_ros
-#pop
+
 class Pathing():
 	def __init__(self, waypoint1, waypoint2):
 		rospy.init_node("pathing")
 		self.waypoint1 = waypoint1
 		self.waypoint2 = waypoint2
 		self.odomSub = rospy.Subscriber("odom_topic", PoseStamped, self.odomCB)
-		self.threshold = 0.2
-		self.speed = 0.75
-		self.odom = None
+		self.threshold = 0.2	# Dist from path to count as on path (m)
+		self.speed = 0.75		# Percentage velocity (1)
+		self.odom = None		# Storage to most recent odom data
 
 	def odomCB(self,data):
 		self.odom = data
@@ -34,6 +34,8 @@ class Pathing():
 	# 	return vector
 
 	def passOnTwist(self):
+		# Publish twist msg based on current tractor position
+
 		vector = self.waypointsToVectors()
 		newTwist = Twist()
 		newTwist.linear.x = self.speed
@@ -41,6 +43,10 @@ class Pathing():
 		return newTwist
 
 	def waypointsToVectors(self):
+		# Gets vector for tractor to travel on
+		# If on line, get vector along line
+		# If not on line, get vector towards line
+
 		if(self.onTheLine()):
 			vector.y = self.waypoint2.y - self.odom.y
 			vector.x = self.waypoint2.x - self.odom.x
@@ -48,18 +54,21 @@ class Pathing():
 		else:
 			distance = self.distanceToLine()
 			vector.y = self.waypoint2.y - self.waypoint1.y + -1*distance * (self.waypoint2.x - self.waypoint1.x)
-			vector.x = self.waypoint2.x - self.waypoint1.x + distance * (self.waypoint2.y - self.waypoint1.y)	
-			return vector	
-
+			vector.x = self.waypoint2.x - self.waypoint1.x + distance * (self.waypoint2.y - self.waypoint1.y)
+			return vector
 
 	def onTheLine(self):
+		# Returns bool if tractor within threshold of line
+
 		distance = self.distanceToLine()
 		if(math.abs(distance) < self.threshold):
 			return True
 		else:
-			return False		
+			return False
 
 	def distanceToLine(self):
+		# gives distance to line between waypoints
+
 		x1 = self.waypoint1.x
 		x2 = self.waypoint2.x
 		y1 = self.waypoint1.y

@@ -3,11 +3,12 @@ import math
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
 import tf
+from checkArrival.srv import *
 
 class Pathing():
 	def __init__(self):
 		rospy.init_node("pathing")
-		self.s = rospy.Service('getCurrentTwist', GetCurrTwist, self.handleTwistSrv)
+		self.s = rospy.Service('getCurrentTwist', GetCurrTwist, self.getCurrentTwist)
 		self.s = rospy.Service('checkArrival', checkArrival, checkArrival)
 		waypoint1 = None
 		waypoint2 = None
@@ -16,24 +17,12 @@ class Pathing():
 		self.speed = 0.75		# Percentage velocity (1)
 		rospy.spin()
 
-	def odomCB(self,data):
-		self.odom = data
-
-	def handleTwistSrv(self, req):
-		# Updates pathing waypoint attributes, and replies with calculated twist given waypoints
-		self.waypoint1 = req.waypoint1
-		self.waypoint2 = req.waypoint2
-
-	def getCurrentTwist(self):
-		# while(!self.isItThere()):
-		return self.passOnTwist()
-
-	# def isItThere(self):
-	# 	vector = self.OdomToWaypoint()
-	# 	if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
-	# 		return True
-	# 	else:
-	# 		return False
+	def isItThere(self, req):
+		vector = self.OdomToWaypoint(req.wp2)
+		if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
+			return checkArrivalResponse(True)
+		else:
+			return checkArrivalResponse(False)
 
 	def odomToWaypoint(self, waypoint2):
 		vector.y = waypoint2.y - self.odom.y

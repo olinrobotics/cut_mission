@@ -11,7 +11,7 @@ class Pathing():
 	def __init__(self):
 		rospy.init_node("pathing")
 		self.s = rospy.Service('getCurrentTwist', GetCurrTwist, self.getCurrentTwist)
-		self.s = rospy.Service('checkArrival', checkArrival, checkArrival)
+		self.s = rospy.Service('checkArrival', CheckArrival, self.checkArrival)
 		waypoint1 = None
 		waypoint2 = None
 		self.listener = tf.TransformListener()
@@ -19,7 +19,7 @@ class Pathing():
 		self.speed = 0.75		# Percentage velocity (1)
 		rospy.spin()
 
-	def isItThere(self, req):
+	def checkArrival(self, req):
 		vector = self.OdomToWaypoint(req.wp2)
 		if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
 			return checkArrivalResponse(True)

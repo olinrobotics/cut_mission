@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  state_controller
   nav_msgs
   sensor_msgs
   message_generation
@@ -42,6 +43,7 @@ generate_messages(
   nav_msgs
   geometry_msgs
   sensor_msgs
+  state_controller
 )
 
 ###################################

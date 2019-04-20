@@ -4,7 +4,7 @@ project(cut_mission)
 ## Compile as C++11, supported in ROS Kinetic and newer
 set(CMAKE_CXX_FLAGS "-std=c++11")
 
-find_package(catkin REQUIRED
+find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
@@ -12,6 +12,7 @@ find_package(catkin REQUIRED
   sensor_msgs
   message_generation
 	laser_geometry
+  laser_assembler
 	tf
 )
 

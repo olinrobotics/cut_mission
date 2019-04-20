@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import rospy
-import pathing
+import Pathing
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
 from midbrain_sc.msg import TwistLabeled
@@ -24,8 +24,7 @@ class P2PBehavior:
 
         # Set up ros constructs
         rospy.init_node('p2p_behavior')
-        topic_in = rospy.get_param('topic')
-        rospy.Subscriber(topic_in, WaypointPairLabeled, self.waypointpair_cb)
+        rospy.Subscriber("/waypoint", WaypointPairLabeled, self.waypointpair_cb)
         self.twist_pub = rospy.Publisher('/state_controller/cmd_behavior', TwistLabeled, queue_size=1)
         self.rate = rospy.Rate(10)
         pass

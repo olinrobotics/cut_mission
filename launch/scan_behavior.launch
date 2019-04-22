@@ -7,6 +7,8 @@
     <param name="fixed_frame" type="string" value="odom" />
   </node>
 
+  <node pkg="cut_mission" type="Pathing.py" name="pathing"/>
+
   <node pkg="cut_mission" type="ScanBehavior" name="scan_behavior" output="screen">
     <remap from="/waypoints" to="/mission_planner/cmd_waypoints"/>
     <remap from="/twist" to="/state_controller/cmd_behavior_twist"/>

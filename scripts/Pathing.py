@@ -1,63 +1,62 @@
+#!/usr/bin/env python
 import rospy
 import math
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
-import tf2_ros
+import tf
+from cut_mission.srv import *
+
 
 class Pathing():
-	def __init__(self, waypoint1, waypoint2):
+	def __init__(self):
 		rospy.init_node("pathing")
-		self.waypoint1 = waypoint1
-		self.waypoint2 = waypoint2
-		self.odomSub = rospy.Subscriber("odom_topic", PoseStamped, self.odomCB)
+		self.s = rospy.Service('getCurrentTwist', GetCurrTwist, self.getCurrentTwist)
+		self.s = rospy.Service('checkArrival', CheckArrival, self.checkArrival)
+		waypoint1 = None
+		waypoint2 = None
+		self.listener = tf.TransformListener()
 		self.threshold = 0.2	# Dist from path to count as on path (m)
 		self.speed = 0.75		# Percentage velocity (1)
-		self.odom = None		# Storage to most recent odom data
+		rospy.spin()
 
-	def odomCB(self,data):
-		self.odom = data
+	def checkArrival(self, req):
+		vector = self.OdomToWaypoint(req.wp2)
+		if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
+			return checkArrivalResponse(True)
+		else:
+			return checkArrivalResponse(False)
 
-	def getCurrentTwist(self):
-		# while(!self.isItThere()):
-		return self.passOnTwist()
+	def odomToWaypoint(self, waypoint2):
+		vector.y = waypoint2.y - self.odom.y
+		vector.x = waypoint2.x - self.odom.x
+		return vector
 
-	# def isItThere(self):
-	# 	vector = self.OdomToWaypoint()
-	# 	if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
-	# 		return True
-	# 	else:
-	# 		return False
-
-	# def odomToWaypoint(self):
-	# 	vector.y = self.waypoint2.y - self.odom.y
-	# 	vector.x = self.waypoint2.x - self.odom.x
-	# 	return vector
-
-	def passOnTwist(self):
+	def getCurrentTwist(self, req):
 		# Publish twist msg based on current tractor position
-
-		vector = self.waypointsToVectors()
+		waypoint1 = req.a
+		waypoint2 = req.b
+		self.linear, self.angular = self.tf.lookupTransform("/base_link", "/map", rospy.Time())
+		vector = self.waypointsToVectors(waypoint1, waypoint2)
 		newTwist = Twist()
 		newTwist.linear.x = self.speed
-		newTwist.angular.z = math.atan2(vector.y/vector.x) - self.odom.angular.z
+		newTwist.angular.z = math.atan2(vector.y/vector.x) - self.angular.z
 		return newTwist
 
-	def waypointsToVectors(self):
+	def waypointsToVectors(self, waypoint1, waypoint2):
 		# Gets vector for tractor to travel on
 		# If on line, get vector along line
 		# If not on line, get vector towards line
-
-		if(self.onTheLine()):
-			vector.y = self.waypoint2.y - self.odom.y
-			vector.x = self.waypoint2.x - self.odom.x
+		if(self.onTheLine(waypoint1, waypoint2)):
+			vector.y = waypoint2.y - self.linear.y
+			vector.x = waypoint2.x - self.linear.x
 			return vector
 		else:
-			distance = self.distanceToLine()
-			vector.y = self.waypoint2.y - self.waypoint1.y + -1*distance * (self.waypoint2.x - self.waypoint1.x)
-			vector.x = self.waypoint2.x - self.waypoint1.x + distance * (self.waypoint2.y - self.waypoint1.y)
+			distance = self.distanceToLine(waypoint1, waypoint2)
+			vector.y = waypoint2.y - waypoint1.y + -1*distance * (waypoint2.x - waypoint1.x)
+			vector.x = waypoint2.x - waypoint1.x + distance * (waypoint2.y - waypoint1.y)
 			return vector
 
-	def onTheLine(self):
+	def onTheLine(self, waypoint1, waypoint2):
 		# Returns bool if tractor within threshold of line
 
 		distance = self.distanceToLine()
@@ -66,15 +65,18 @@ class Pathing():
 		else:
 			return False
 
-	def distanceToLine(self):
+	def distanceToLine(self, waypoint1, waypoint2):
 		# gives distance to line between waypoints
 
-		x1 = self.waypoint1.x
-		x2 = self.waypoint2.x
-		y1 = self.waypoint1.y
-		y2 = self.waypoint2.y
+		x1 = waypoint1.x
+		x2 = waypoint2.x
+		y1 = waypoint1.y
+		y2 = waypoint2.y
 		a = y1 - y2
 		b = x2 - x1
 		c = x1*y2 - x2*y1
-		distance = a*x + b*y + c / (math.sqrt(a**2 + b**2))
+		distance = a*self.linear.x + b*self.linear.y + c / (math.sqrt(a**2 + b**2))
 		return distance
+
+if __name__ == "__main__":
+	ex = Pathing()

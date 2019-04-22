@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  state_controller
   nav_msgs
   sensor_msgs
   message_generation
@@ -24,6 +25,8 @@ find_package(catkin REQUIRED COMPONENTS
 add_service_files(
  FILES
  CutPlan.srv
+ GetCurrTwist.srv
+ CheckArrival.srv
 )
 
 # Generate messages in the 'msg' folder
@@ -40,6 +43,7 @@ generate_messages(
   nav_msgs
   geometry_msgs
   sensor_msgs
+  state_controller
 )
 
 ###################################

@@ -5,6 +5,7 @@ import Pathing
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
 from midbrain_sc.msg import TwistLabeled
+from cut_mission.srv import *
 
 class P2PBehavior:
     ''' @brief Behavior class for basic waypoint navigation
@@ -47,6 +48,14 @@ class P2PBehavior:
         ''' @brief Check for arrival at attr waypoint_2
             return [bool] have we arrived
             '''
+        rospy.wait_for_service('checkArrival')
+        try:
+            checkArrival = rospy.ServiceProxy('checkArrival', checkArrival)
+            response = checkArrival(self.wp1, self.wp2)
+            return response.arrived
+        except rospy.ServiceException, e:
+            print "Service call failed: %s"%e
+
 
     def reset_behavior(self):
         ''' @brief clears metadata, prepares for next activation

@@ -9,32 +9,38 @@
 #include <laser_geometry/laser_geometry.h>
 #include <tf/transform_listener.h>
 #include <laser_assembler/AssembleScans.h>
+#include <cut_mission/CheckArrival.h>
+#include <cut_mission/GetCurrTwist.h>
 
 ScanBehavior::ScanBehavior()
  : rate(ros::Rate(15))
- , scan_sub(n.subscribe("/scan", 1, &ScanBehavior::ScanBehavior::scanCB, this))
+ , scan_sub    (n.subscribe("/scan", 1, &ScanBehavior::ScanBehavior::scanCB, this))
  , waypoint_sub(n.subscribe("/waypoints", 1, &ScanBehavior::ScanBehavior::waypointPairCB, this))
- , twist_pub(n.advertise<state_controller::TwistLabeled>("/twist", 1))
- , srv_client(n.serviceClient<laser_assembler::AssembleScans>("assemble_scans"))
- , filename("")
- , is_running(false)
- , frame_id("None")
- , label("scan") {
+ , twist_pub   (n.advertise<state_controller::TwistLabeled>("/twist", 1))
+ , assemble_client(n.serviceClient<laser_assembler::AssembleScans>("assemble_scans"))
+ , twist_client   (n.serviceClient<cut_mission::GetCurrTwist>("getCurrentTwist"))
+ , arrive_client  (n.serviceClient<cut_mission::CheckArrival>("checkArrival"))
+ , waypoints   (new cut_mission::WaypointPairLabeled())
+ , projector   (new laser_geometry::LaserProjection())
+ , tf_listener (new tf::TransformListener())
+ , filename  ("")
+ , frame_id  ("None")
+ , label     ("scan")
+ , is_running(false) {
 
    // Ensure filename parameter is properly loaded
    n.getParam("/scan_behavior/file_name", filename);
    n.getParam("/scan_behavior/datatype", datatype);
-
 
    if (filename == "") {
      ROS_ERROR("ScanBehavior: cannot find /scan_behavivor/file_name parameter - did you run the launch file?");
      ros::shutdown();
    }
    file = std::ofstream();
-   projecter = new laser_geometry::LaserProjection();
-   tf_listener = new tf::TransformListener();
    ros::service::waitForService("assemble_scans");
-   //ros::serviceClient client = n.serviceclient<AssembleScans>("assemble_scans");
+   ros::service::waitForService("getCurrentTwist");
+   ros::service::waitForService("checkArrival");
+
  }
 
 void ScanBehavior::scanCB(const sensor_msgs::LaserScan& msg) {
@@ -47,7 +53,7 @@ void ScanBehavior::scanCB(const sensor_msgs::LaserScan& msg) {
     sensor_msgs::PointCloud cloud;
     try {
       tf_listener->waitForTransform("/hokuyo", "/odom", ros::Time::now(), ros::Duration(0.05));
-      projecter->transformLaserScanToPointCloud("odom", msg, cloud, *tf_listener);
+      projector->transformLaserScanToPointCloud("odom", msg, cloud, *tf_listener);
     } catch (tf::TransformException& e) {
         std::cout<<e.what()<<std::endl;
         return;
@@ -83,6 +89,8 @@ int ScanBehavior::runInit(const cut_mission::WaypointPairLabeled& p, const std::
     return 1;
   }
   ROS_INFO("%s - starting behavior", label.c_str());
+  waypoints->waypoint1 = p.waypoint1;
+  waypoints->waypoint2 = p.waypoint2;
 
   // Open filename param if no file given
   if (f=="") {
@@ -105,12 +113,22 @@ void ScanBehavior::spin() {
   // Keeps node updating at rate attr. frequency
 
   while (n.ok()) {
+
+    // If the behavior is currently executing
     if (is_running) {
-      if (arrivedAtPoint()) runHalt();
+
+      // Call Pathing node srv to see if arrived at wp2
+      arrive_srv.request.waypoint1 = waypoints->waypoint1;
+      arrive_srv.request.waypoint2 = waypoints->waypoint2;
+      arrive_client.call(arrive_srv);
+
+      if (arrive_srv.response.arrived.data) runHalt();  // If arrived at 2nd wp, stop
       else {
-        // Get vector from Nathan's node
+        // Get twist msg from Pathing node, label, and publish
+        twist_client.call(twist_srv);
         auto msg = state_controller::TwistLabeled();
         msg.label.data = label;
+        msg.twist = twist_srv.response.vector;
         twist_pub.publish(msg);
       }
     }
@@ -129,9 +147,8 @@ int ScanBehavior::runHalt() {
   is_running = false;
   buildcloud_srv.request.end = ros::Time::now();
   file.close();
-  //printf(buildcloud_srv.request);
 
-  if (srv_client.call(buildcloud_srv))
+  if (assemble_client.call(buildcloud_srv))
     printf("Got cloud with %u points\n", int(buildcloud_srv.response.cloud.points.size()));
   else
     printf("Service call failed\n");

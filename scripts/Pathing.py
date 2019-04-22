@@ -2,7 +2,7 @@
 import rospy
 import math
 from cut_mission.msg import Waypoint, WaypointPairLabeled
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, Point
 import tf
 from cut_mission.srv import *
 
@@ -20,22 +20,25 @@ class Pathing():
 		rospy.spin()
 
 	def checkArrival(self, req):
-		vector = self.OdomToWaypoint(req.wp2)
+		#linear doesn't have x????
+		self.linear, self.angular = self.listener.lookupTransform("/base_link", "/odom", rospy.Time())
+		vector = self.odomToWaypoint(req.waypoint2)
 		if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
 			return checkArrivalResponse(True)
 		else:
 			return checkArrivalResponse(False)
 
 	def odomToWaypoint(self, waypoint2):
-		vector.y = waypoint2.y - self.odom.y
-		vector.x = waypoint2.x - self.odom.x
+		vector = Point()
+		vector.y = waypoint2.point.y - self.linear.y
+		vector.x = waypoint2.point.x - self.linear.x
 		return vector
 
 	def getCurrentTwist(self, req):
 		# Publish twist msg based on current tractor position
-		waypoint1 = req.a
-		waypoint2 = req.b
-		self.linear, self.angular = self.tf.lookupTransform("/base_link", "/map", rospy.Time())
+		waypoint1 = req.waypoint1
+		waypoint2 = req.waypoint2
+		self.linear, self.angular = self.listener.lookupTransform("/base_link", "/odom", rospy.Time())
 		vector = self.waypointsToVectors(waypoint1, waypoint2)
 		newTwist = Twist()
 		newTwist.linear.x = self.speed
@@ -47,13 +50,13 @@ class Pathing():
 		# If on line, get vector along line
 		# If not on line, get vector towards line
 		if(self.onTheLine(waypoint1, waypoint2)):
-			vector.y = waypoint2.y - self.linear.y
-			vector.x = waypoint2.x - self.linear.x
+			vector.y = waypoint2.point.y - self.linear.y
+			vector.x = waypoint2.point.x - self.linear.x
 			return vector
 		else:
 			distance = self.distanceToLine(waypoint1, waypoint2)
-			vector.y = waypoint2.y - waypoint1.y + -1*distance * (waypoint2.x - waypoint1.x)
-			vector.x = waypoint2.x - waypoint1.x + distance * (waypoint2.y - waypoint1.y)
+			vector.y = waypoint2.point.y - waypoint1.point.y + -1*distance * (waypoint2.point.x - waypoint1.point.x)
+			vector.x = waypoint2.point.x - waypoint1.point.x + distance * (waypoint2.point.y - waypoint1.point.y)
 			return vector
 
 	def onTheLine(self, waypoint1, waypoint2):
@@ -68,10 +71,10 @@ class Pathing():
 	def distanceToLine(self, waypoint1, waypoint2):
 		# gives distance to line between waypoints
 
-		x1 = waypoint1.x
-		x2 = waypoint2.x
-		y1 = waypoint1.y
-		y2 = waypoint2.y
+		x1 = waypoint1.point.x
+		x2 = waypoint2.point.x
+		y1 = waypoint1.point.y
+		y2 = waypoint2.point.y
 		a = y1 - y2
 		b = x2 - x1
 		c = x1*y2 - x2*y1

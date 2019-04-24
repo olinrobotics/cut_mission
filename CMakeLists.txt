@@ -1,13 +1,20 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(cut_mission)
 
-find_package(catkin REQUIRED
+## Compile as C++11, supported in ROS Kinetic and newer
+set(CMAKE_CXX_FLAGS "-std=c++11")
+
+find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
   std_msgs
+  state_controller
   nav_msgs
   sensor_msgs
   message_generation
+	laser_geometry
+  laser_assembler
+	tf
 )
 
 ################################################
@@ -18,6 +25,15 @@ find_package(catkin REQUIRED
 add_service_files(
  FILES
  CutPlan.srv
+ GetCurrTwist.srv
+ CheckArrival.srv
+)
+
+# Generate messages in the 'msg' folder
+add_message_files(
+ FILES
+ Waypoint.msg
+ WaypointPairLabeled.msg
 )
 
 # Generate added messages and services with any dependencies listed here
@@ -27,6 +43,7 @@ generate_messages(
   nav_msgs
   geometry_msgs
   sensor_msgs
+  state_controller
 )
 
 ###################################
@@ -52,6 +69,11 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
-# ${catkin_INCLUDE_DIRS}
+  ${catkin_INCLUDE_DIRS}
 )
+
+add_executable( ScanBehavior src/ScanBehavior/ScanBehavior.cpp )
+
+target_link_libraries( ScanBehavior ${catkin_LIBRARIES} )
+
+add_dependencies( ScanBehavior ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

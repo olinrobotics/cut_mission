@@ -2,8 +2,9 @@
 
 from math import sqrt
 import rospy as rp
+import numpy as np
 from geometry_msgs.msg import Pose, Point
-from sensor_msgs.msg import PointCloud2
+from sensor_msgs.msg import PointCloud2, Image
 from shape_msgs.msg import Plane
 
 def get_avgaltitude_sweep(pose, scan, thresh=0.1):
@@ -46,3 +47,40 @@ def get_param_safe(param):
         return None
 
     return rp.get_param(param)
+
+def nparray_to_rosimg(self, array):
+    """ @brief converts numpy 2D array to ROS sensor_msgs/Image msg
+        @param[in] 2D numpy array of integers
+        return ROS Image
+    """
+
+    # Get min-max range
+    array[array > 1E308] = 0
+    array[array < 0] = 0
+    min = np.min(array)
+    max = np.max(array)
+    array = ( (array - min)/(max-min) ) * 255
+    # Scale values between 0 and 255
+    image = Image()
+    image.encoding = "mono8"
+    image.is_bigendian = 0
+    image.width = array.shape[0]
+    image.height = array.shape[1]
+    image.step = array.shape[0]
+    image.data = [int(i) for i in array.flatten('F')]
+    return image
+
+def rosimg_to_nparray(self, image):
+    """ @brief converts ROS sensor_msgs/Image msg to numpy 2D array
+        @param[in] ROS Image
+        return 2D numpy array of integers
+    """
+
+    array = np.zeros(image.height, image.width)
+    index = 0
+
+    for i in range(0,image.height):
+        for j in range(0,image.width):
+            array[i] = image.data[index]
+            index += 1
+    return array

@@ -1,4 +1,3 @@
-nav_msgs/Path basepath
-sensor_msgs/Image raw_surface
+string filepath
 ---
 nav_msgs/Path toolpath

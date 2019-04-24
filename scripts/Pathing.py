@@ -30,8 +30,8 @@ class Pathing():
 
 	def odomToWaypoint(self, waypoint2):
 		vector = Point()
-		vector.y = waypoint2.point.y - self.linear.y
-		vector.x = waypoint2.point.x - self.linear.x
+		vector.y = waypoint2.point.y - self.linear[1]
+		vector.x = waypoint2.point.x - self.linear[0]
 		return vector
 
 	def getCurrentTwist(self, req):
@@ -42,16 +42,17 @@ class Pathing():
 		vector = self.waypointsToVectors(waypoint1, waypoint2)
 		newTwist = Twist()
 		newTwist.linear.x = self.speed
-		newTwist.angular.z = math.atan2(vector.y/vector.x) - self.angular.z
+		newTwist.angular.z = math.atan2(vector[1], vector[0]) - self.angular[2]
 		return newTwist
 
 	def waypointsToVectors(self, waypoint1, waypoint2):
 		# Gets vector for tractor to travel on
 		# If on line, get vector along line
 		# If not on line, get vector towards line
+		vector = [None] * 2;
 		if(self.onTheLine(waypoint1, waypoint2)):
-			vector.y = waypoint2.point.y - self.linear.y
-			vector.x = waypoint2.point.x - self.linear.x
+			vector[1] = waypoint2.point.y - self.linear[1]
+			vector[0] = waypoint2.point.x - self.linear[0]
 			return vector
 		else:
 			distance = self.distanceToLine(waypoint1, waypoint2)
@@ -62,8 +63,8 @@ class Pathing():
 	def onTheLine(self, waypoint1, waypoint2):
 		# Returns bool if tractor within threshold of line
 
-		distance = self.distanceToLine()
-		if(math.abs(distance) < self.threshold):
+		distance = self.distanceToLine(waypoint1, waypoint2)
+		if(abs(distance) < self.threshold):
 			return True
 		else:
 			return False
@@ -78,7 +79,8 @@ class Pathing():
 		a = y1 - y2
 		b = x2 - x1
 		c = x1*y2 - x2*y1
-		distance = a*self.linear.x + b*self.linear.y + c / (math.sqrt(a**2 + b**2))
+		if (a == b == 0): distance = 0
+		else: distance = a*self.linear[0] + b*self.linear[1] + c / (math.sqrt(a**2 + b**2))
 		return distance
 
 if __name__ == "__main__":

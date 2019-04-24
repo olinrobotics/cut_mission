@@ -3,6 +3,7 @@ import rospy
 import math
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist, Point
+from std_msgs.msg import Bool
 import tf
 from cut_mission.srv import *
 
@@ -24,9 +25,9 @@ class Pathing():
 		self.linear, self.angular = self.listener.lookupTransform("/base_link", "/odom", rospy.Time())
 		vector = self.odomToWaypoint(req.waypoint2)
 		if(vector.x**2 + vector.y**2 + vector.z**2 < self.threshold**2):
-			return checkArrivalResponse(True)
+			return Bool(True)
 		else:
-			return checkArrivalResponse(False)
+			return Bool(False)
 
 	def odomToWaypoint(self, waypoint2):
 		vector = Point()

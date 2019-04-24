@@ -57,8 +57,8 @@ class Pathing():
 			return vector
 		else:
 			distance = self.distanceToLine(waypoint1, waypoint2)
-			vector.y = waypoint2.point.y - waypoint1.point.y + -1*distance * (waypoint2.point.x - waypoint1.point.x)
-			vector.x = waypoint2.point.x - waypoint1.point.x + distance * (waypoint2.point.y - waypoint1.point.y)
+			vector[1] = waypoint2.point.y - waypoint1.point.y + -1*distance * (waypoint2.point.x - waypoint1.point.x)
+			vector[0] = waypoint2.point.x - waypoint1.point.x + distance * (waypoint2.point.y - waypoint1.point.y)
 			return vector
 
 	def onTheLine(self, waypoint1, waypoint2):

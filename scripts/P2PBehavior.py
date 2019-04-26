@@ -4,8 +4,9 @@ import rospy
 import Pathing
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
-from midbrain_sc.msg import TwistLabeled
+from state_controller.msg import TwistLabeled
 from cut_mission.srv import *
+from std_msgs.msg import String
 
 class P2PBehavior:
     ''' @brief Behavior class for basic waypoint navigation
@@ -39,9 +40,9 @@ class P2PBehavior:
             if self.is_active:
                 rospy.logerr('P2PBehavior: Cannot execute new command, already running')
             else:
-                self.is_active = True
                 self.wp_1 = msg.waypoint1
                 self.wp_2 = msg.waypoint2
+                self.is_active = True
 
     def check_arrival(self):
         ''' @brief Check for arrival at attr waypoint_2
@@ -50,7 +51,7 @@ class P2PBehavior:
         rospy.wait_for_service('checkArrival')
         try:
             checkArrival = rospy.ServiceProxy('checkArrival', CheckArrival)
-            response = checkArrival(self.wp1, self.wp2)
+            response = checkArrival(self.wp_1, self.wp_2)
             return response.arrived
         except rospy.ServiceException, e:
             print "Service call failed: %s"%e
@@ -70,10 +71,16 @@ class P2PBehavior:
 
         while not rospy.is_shutdown():
             if self.is_active:
-                if not self.check_arrival():
+                if self.check_arrival():
                     msg = TwistLabeled()
-                    msg.label = '0'
-                    msg.twist = self.pathFinder.getCurrentTwist()
+                    msg.label = String("p2p")
+                    rospy.wait_for_service('getCurrentTwist')
+                    try:
+                        getCurrentTwist = rospy.ServiceProxy('getCurrentTwist', GetCurrTwist)
+                        response = getCurrentTwist(self.wp_1, self.wp_2)
+                        msg.twist = response.vector
+                    except rospy.ServiceException, e:
+                        print "Service call failed: %s"%e
                     self.twist_pub.publish(msg)
 
                 else:

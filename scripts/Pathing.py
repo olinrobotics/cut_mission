@@ -16,7 +16,7 @@ class Pathing():
 		waypoint1 = None
 		waypoint2 = None
 		self.listener = tf.TransformListener()
-		self.threshold = 0.2	# Dist from path to count as on path (m)
+		self.threshold = 0.5	# Dist from path to count as on path (m)
 		self.speed = 0.75		# Percentage velocity (1)
 		rospy.spin()
 
@@ -40,10 +40,13 @@ class Pathing():
 		waypoint1 = req.waypoint1
 		waypoint2 = req.waypoint2
 		self.linear, self.angular = self.listener.lookupTransform("/base_link", "/odom", rospy.Time())
+		rospy.loginfo(self.angular[2])
+		rospy.loginfo(self.linear)
 		vector = self.waypointsToVectors(waypoint1, waypoint2)
 		newTwist = Twist()
 		newTwist.linear.x = self.speed
 		newTwist.angular.z = math.atan2(vector[1], vector[0]) - self.angular[2]
+		rospy.loginfo(newTwist)
 		return newTwist
 
 	def waypointsToVectors(self, waypoint1, waypoint2):
@@ -54,6 +57,7 @@ class Pathing():
 		if(self.onTheLine(waypoint1, waypoint2)):
 			vector[1] = waypoint2.point.y - self.linear[1]
 			vector[0] = waypoint2.point.x - self.linear[0]
+			rospy.loginfo(vector)
 			return vector
 		else:
 			distance = self.distanceToLine(waypoint1, waypoint2)
@@ -81,7 +85,8 @@ class Pathing():
 		b = x2 - x1
 		c = x1*y2 - x2*y1
 		if (a == b == 0): distance = 0
-		else: distance = a*self.linear[0] + b*self.linear[1] + c / (math.sqrt(a**2 + b**2))
+		else: distance = (a*self.linear[0] + b*self.linear[1] + c) / (math.sqrt(a**2 + b**2))
+		rospy.loginfo(distance)
 		return distance
 
 if __name__ == "__main__":

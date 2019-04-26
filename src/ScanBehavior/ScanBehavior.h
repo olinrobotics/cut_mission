@@ -4,15 +4,15 @@
 #include <string>
 #include <fstream>
 #include <ros/ros.h>
-#include <sensor_msgs/LaserScan.h>
-#include <cut_mission/WaypointPairLabeled.h>
+#include <tf/transform_listener.h>
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
+#include <sensor_msgs/LaserScan.h>
 #include <laser_geometry/laser_geometry.h>
-#include <tf/transform_listener.h>
 #include <laser_assembler/AssembleScans.h>
 #include <cut_mission/CheckArrival.h>
 #include <cut_mission/GetCurrTwist.h>
+#include <cut_mission/WaypointPairLabeled.h>
 
 class ScanBehavior {
 

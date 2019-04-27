@@ -1,0 +1,8 @@
+<launch>
+  <node pkg="cut_mission" type ="P2PBehavior.py" name="P2PBehavior" output="screen">
+
+  </node>
+  <node pkg="cut_mission" type="Pathing.py" name="Pathing" output="screen">
+
+  </node>
+</launch>

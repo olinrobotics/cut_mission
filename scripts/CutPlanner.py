@@ -2,14 +2,17 @@
 
 import rospy
 import numpy as np
+import math
 import helper_functions as hf
 import re
 import csv
+import tf
 
 # Import ROS msgs
 from cut_mission.srv import CutPlan
 from std_msgs.msg import Header
 from nav_msgs.msg import Path
+from geometry_msgs.msg import Pose, Point
 
 class CutPlanner():
 
@@ -18,14 +21,15 @@ class CutPlanner():
 
         rospy.init_node('cut_planner')
         self.service = rospy.Service('plan_bladepass', CutPlan, self.cutplan_call)
+        self.path_pub = rospy.Publisher('debug_path', Path, queue_size=0)
         self.name = "cutplan"
         self.file_location = None
         self.blade_width = 1.0 #meters
         self.max_cut = 0.1 #meters
 
-        self.data_raw = None
-        self.data_filtered = None
-        self.data_cut = None
+        self.data_raw = [None]
+        self.data_filtered = [None]
+        self.data_cut = [None]
         self.path_blade = Path()
         self.path_baselink = Path()
 
@@ -34,7 +38,7 @@ class CutPlanner():
     def cutplan_call(self, req):
         # Run plan cut on data in given file, return cut path
         #TODO implement properly
-        rospy.loginfo("cutplan - request for cut plan given file %s", req)
+        rospy.loginfo("cutplan - request for cut plan, %s", req)
         self.plan_cut(req.filepath)
         return Path()
 
@@ -62,14 +66,13 @@ class CutPlanner():
             """
 
         # TODO actually filter image
-        if not self.data_raw == None:
-            rospy.loginfo("%s - filtering scan & position data", self.name)
-            avg_plane = self.data_raw.shape[1]/2
-            self.data_filtered = np.array(self.data_raw[:,avg_plane,:])
-            return 0
-        else:
+        if len(self.data_raw) == 0:
             rospy.logerr("%s - filtering step cannot find raw data", self.name)
             return 1
+        rospy.loginfo("%s - filtering scan & position data", self.name)
+        avg_plane = self.data_raw.shape[1]/2
+        self.data_filtered = np.array(self.data_raw[:,avg_plane,:])
+        return 0
 
     def plan_cutsurface(self, data_final):
         """ @brief create data set defining new cut surface
@@ -77,20 +80,19 @@ class CutPlanner():
             @arg 1D array representing final surface x-sec
             @return success boolean
             """
-        if not self.data_filtered == None:
-            rospy.loginfo("%s - calculating next cutsurface", self.name)
-            # Verify input arrays are equal length
-            if not len(self.data_filtered) == len(data_final):
-                rospy.logerror("%s - scan length doesn't match desired surface length", self.name)
-                return 2
-
-            # Approach 1: Take max cut depth across surface up to final surface
-            data_cutraw = self.data_filtered - self.max_cut
-            self.data_cut = np.clip(data_cutraw, data_final, None)
-
-        else:
+        if len(self.data_filtered) == 0:
             rospy.logerr("%s - cutsurface planning step cannot find filtered data", self.name)
             return 1
+
+        rospy.loginfo("%s - calculating next cutsurface", self.name)
+        # Verify input arrays are equal length
+        if not len(self.data_filtered) == len(data_final):
+            rospy.logerror("%s - scan length doesn't match desired surface length", self.name)
+            return 2
+
+        # Approach 1: Take max cut depth across surface up to final surface
+        data_cutraw = self.data_filtered - self.max_cut
+        self.data_cut = np.clip(data_cutraw, data_final, None)
 
     def planpath_blade(self):
         """ @brief Generates blade and base_link poses based on data_cut
@@ -99,20 +101,24 @@ class CutPlanner():
             @return success boolean
             """
 
-        if not self.data_cut == None:
-            rospy.loginfo("%s - calculating bladepath", self.name)
-            # Verify input arrays are equal length
-            if not len(self.data_filtered) == len(data_final):
-                rospy.logerror("%s - scan length doesn't match desired surface length", self.name)
-                return 2
-
-            # Approach 1: Take max cut depth across surface up to final surface
-            data_cutraw = self.data_filtered - self.max_cut
-            self.data_cut = np.clip(data_cutraw, data_final, None)
-
-        else:
-            rospy.logerr("%s - cutsurface planning step cannot find filtered data", self.name)
+        if len(self.data_cut) == 0:
+            rospy.logerr("%s - cutsurface planning step cannot find cutsurface data", self.name)
             return 1
+
+        rospy.loginfo("%s - calculating bladepath", self.name)
+        path = [None] * len(self.data_cut)
+
+        # Calculate Pose at each point in planned cut
+        for i in range(0, len(self.data_cut)):
+            x,y,z = self.data_cut[0]
+            pitch = math.tan(z/x)
+            yaw = math.tan(y/x)
+            quaternion = tf.transformations.quaternion_from_euler(0,pitch,yaw) # Vector pointing to next point
+            path[i] = Pose(position=Point(x,y,z), orientation=quaternion)
+
+        self.path_blade.poses = path
+        self.path_pub.publish(self.path_blade)
+        return 0
 
     def planpath_baselink(self):
         """ @brief Generates base_link ROS Path based on path_blade
@@ -126,11 +132,11 @@ class CutPlanner():
             @return success boolean
             """
 
-            if self.path_blade.header.frame_id == '':
-                rospy.logerr("%s - cutsurface planning step cannot find filtered data", self.name)
-                return 1
+        if self.path_blade.header.frame_id == '':
+            rospy.logerr("%s - cutsurface planning step cannot find filtered data", self.name)
+            return 1
 
-            return 2
+        return 2
 
     def check_bladeposes(self, base_path, blade_path):
         """ @brief Edit blade poses to be realizeable given their attached base_link poses
@@ -142,9 +148,9 @@ class CutPlanner():
         return blade_path
 
     def clean_attributes(self):
-        self.data_raw = None
-        self.data_filtered = None
-        self.data_cut = None
+        self.data_raw = [None]
+        self.data_filtered = [None]
+        self.data_cut = [None]
         self.path_blade = Path()
         self.path_baselink = Path()
         return
@@ -159,7 +165,7 @@ class CutPlanner():
         self.filter_data()
         data_cut = np.zeros(shape=self.data_filtered.shape) - 1
         self.plan_cutsurface(data_cut)
-        #bladeplan = self.plan_bladeposes(cutsurface, path)
+        self.planpath_blade()
         #bladeplan = self.check_bladeposes(path, bladeplan)
         #Send bladeplan along service
         self.clean_attributes()

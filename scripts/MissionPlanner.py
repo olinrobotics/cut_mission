@@ -4,7 +4,7 @@ import rospy
 import yaml
 import time
 from std_msgs.msg import String, UInt8, Header
-from cut_planner.msg import Waypoint, WaypointPairLabeled
+from cut_mission.msg import Waypoint, WaypointPairLabeled
 
 class MissionPlanner:
     """ @brief executes mission from mission file
@@ -17,9 +17,11 @@ class MissionPlanner:
 
         # Set up ros stuff
         rospy.init_node('mission_planner')
-        self.state_pub = rospy.Publisher('/state_controller/cmd_state', UInt8, queue_size=1)
+        self.state_pub = rospy.Publisher('/state_controller/cmd_state', String, queue_size=1)
         self.behavior_pub = rospy.Publisher('/mission_planner/out_behavior', WaypointPairLabeled, queue_size=1)
-        rospy.Subscriber('/mission_planner/in_behavior', UInt8, self.in_behavior_cb)
+        rospy.Subscriber('/mission_planner/in_behavior', String, self.in_behavior_cb)
+
+        self.name = 'mp'
 
         # Set up mission
         time.sleep(0.5)
@@ -37,15 +39,10 @@ class MissionPlanner:
     def in_behavior_cb(self, msg):
         """ @brief end segment if reached wp is next in mission
             """
-        if msg.data == self.curr_wp_index + 1:
-            if len(self.waypoints) > msg.data:
-                rospy.logdebug("Recieved next waypoint")
-                self.next_behavior()
-            else:
-                rospy.logdebug("Recieved last waypoint")
-                self.end_mission()
+        if msg.data == self.curr_waypoint.waypoint1.behavior:
+            self.next_behavior()
         else:
-            rospy.logwarn("Recieved incorrect waypoint")
+            rospy.logwarn("%s - Recieved incorrect waypoint", self.name)
 
     def load_mission(self, file):
         """ @brief load waypoints into list of Waypoints
@@ -58,19 +55,18 @@ class MissionPlanner:
             # Load mission yaml file for parsing
             doc = yaml.load(f)
             self.mission = doc['title']
-            rospy.loginfo("Loading mission " + self.mission)
+            rospy.loginfo("%s - Loading mission %s", self.name, self.mission)
             self.waypoints = [None] * len(doc['waypoints'])
 
             # Create ROS Waypoint, add to waypoints attribute
             for i in range(len(doc['waypoints'])):
                 msg = Waypoint()
-                msg.header = Header(frame_id=doc['waypoints'][i]['frame'])
                 msg.index = doc['waypoints'][i]['index']
                 msg.behavior = doc['waypoints'][i]['behavior']
-                msg.direction = doc['waypoints'][i]['direction']
+                msg.forward = bool(doc['waypoints'][i]['forward'])
                 msg.autocontinue = bool(doc['waypoints'][i]['autocontinue'])
                 self.waypoints[i] = msg
-                rospy.loginfo("| Loaded waypoint " + str(self.waypoints[i].index))
+                rospy.loginfo("%s - Loaded waypoint %i", self.name, self.waypoints[i].index)
 
             return
 
@@ -91,7 +87,7 @@ class MissionPlanner:
             @param[out] curr_wp_index: updates current waypoint index attr
             """
         self.curr_wp_index = init_wp
-        rospy.loginfo("Starting mission: " + self.mission)
+        rospy.loginfo("%s - Starting mission: %s", self.name, self.mission)
         self.start_behavior(self.curr_wp_index)
         return
 
@@ -111,11 +107,11 @@ class MissionPlanner:
             TODO: Ensure no duplicates in behavior vector
             @return [int]: error repr
             '''
-        rospy.loginfo("Loading behaviors")
+        rospy.loginfo("%s - Loading behaviors", self.name)
         if rospy.has_param('/behaviors'):
             temp_list = rospy.get_param('/behaviors')
         else:
-            rospy.logerr("Error: no /behaviors/ parameters - did you set up the parameter server?")
+            rospy.logerr("%s - no /behaviors/ parameters - did you set up the parameter server?", self.name)
             rospy.signal_shutdown('no /behaviors/ parameters')
             return 1
 
@@ -123,7 +119,7 @@ class MissionPlanner:
             # Populate behavior list with parameter-defined behaviors
             for behavior in temp_list:
                 self.behaviors[behavior] = temp_list[behavior]
-                rospy.loginfo("| Loaded behavior " + behavior + " with id " + str(temp_list[behavior]))
+                rospy.loginfo("%s - Loaded behavior " + behavior + " with id " + str(temp_list[behavior]), self.name)
         return 0
 
     def next_behavior(self):
@@ -151,12 +147,12 @@ class MissionPlanner:
             msg.waypoint2 = self.waypoints[wp_index + 1]
         else:
             msg.waypoint2 = msg.waypoint1
-        rospy.loginfo("| Starting behavior: " + msg.waypoint1.behavior + ", index: " + str(msg.label))
-
-        msg_state = UInt8()
-        msg_state.data = msg.label
+        rospy.loginfo("%s - starting behavior: %s", self.name, msg.waypoint1.behavior)
+        msg_state = String()
+        msg_state.data = msg.waypoint1.behavior
         self.state_pub.publish(msg_state)
         self.behavior_pub.publish(msg)
+        self.curr_waypoint = msg
         return
 
     def end_behavior(self, wp_index):
@@ -166,7 +162,7 @@ class MissionPlanner:
 
         # TODO:run behavior end function
         self.state_pub.publish(self.behaviors['safety'])
-        rospy.loginfo("| Ending behavior: " + self.waypoints[wp_index].behavior)
+        rospy.loginfo("%s - ending behavior: %s", self.name, self.waypoints[wp_index].behavior)
         if not self.waypoints[wp_index].autocontinue:
             pass
             #TODO Add pause for user input here

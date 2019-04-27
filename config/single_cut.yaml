@@ -10,33 +10,33 @@ waypoints:
     point: {x: 0, y: 0, z: 0}
     frame: map
     behavior: scan
-    direction: forward
+    forward: true
     autocontinue: false
   1:
     index: 1
     point: {x: 100, y: 100, z: 20}
     frame: map
     behavior: p2p
-    direction: reverse
+    forward: false
     autocontinue: false
   2:
     index: 2
     point: {x: 0, y: 0, z: 0}
     frame: map
     behavior: cut
-    direction: forward
+    forward: true
     autocontinue: false
   3:
     index: 3
     point: {x: 100, y: 100, z: 20}
     frame: map
     behavior: p2p
-    direction: reverse
+    forward: false
     autocontinue: false
   4:
     index: 4
     point: {x: 0, y: 0, z: 0}
     frame: map
     behavior: safety
-    direction: none
+    forward: none
     autocontinue: none

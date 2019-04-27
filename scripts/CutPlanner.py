@@ -12,7 +12,7 @@ import tf
 from cut_mission.srv import CutPlan
 from std_msgs.msg import Header
 from nav_msgs.msg import Path
-from geometry_msgs.msg import Pose, Point
+from geometry_msgs.msg import Pose, PoseStamped, Point, Quaternion
 
 class CutPlanner():
 
@@ -23,6 +23,7 @@ class CutPlanner():
         self.service = rospy.Service('plan_bladepass', CutPlan, self.cutplan_call)
         self.path_pub = rospy.Publisher('debug_path', Path, queue_size=0)
         self.name = "cutplan"
+        self.frame = 'map'
         self.file_location = None
         self.blade_width = 1.0 #meters
         self.max_cut = 0.1 #meters
@@ -38,9 +39,15 @@ class CutPlanner():
     def cutplan_call(self, req):
         # Run plan cut on data in given file, return cut path
         #TODO implement properly
-        rospy.loginfo("cutplan - request for cut plan, %s", req)
+        rospy.loginfo("%s - request for cut plan, %s", self.name, req)
+        self.clean_attributes()
         self.plan_cut(req.filepath)
-        return Path()
+        if not self.path_blade.header.frame_id == '':
+            rospy.loginfo("%s - successfully generated cut plan", self.name)
+            return self.path_blade
+        else:
+            rospy.logerr("%s - failed to generate cut plan", self.name)
+            return Path()
 
     def load_data(self, file):
         """ @brief load localized scan data from file
@@ -110,13 +117,21 @@ class CutPlanner():
 
         # Calculate Pose at each point in planned cut
         for i in range(0, len(self.data_cut)):
-            x,y,z = self.data_cut[0]
+            x = float(self.data_cut[0,0])
+            y = float(self.data_cut[0,1])
+            z = float(self.data_cut[0,2])
             pitch = math.tan(z/x)
             yaw = math.tan(y/x)
-            quaternion = tf.transformations.quaternion_from_euler(0,pitch,yaw) # Vector pointing to next point
-            path[i] = Pose(position=Point(x,y,z), orientation=quaternion)
+            [qx,qy,qz,qw] = tf.transformations.quaternion_from_euler(0,pitch,yaw) # Vector pointing to next point
+            path[i] = PoseStamped(header=Header(stamp=rospy.get_rostime(),
+                                                frame_id=self.frame),
+                                  pose=Pose(position=Point(x,y,z),
+                                            orientation=Quaternion(qx,qy,qz,qw)))
 
+        # Store values in Path
         self.path_blade.poses = path
+        self.path_blade.header.frame_id = self.frame
+        self.path_blade.header.stamp = rospy.get_rostime()
         self.path_pub.publish(self.path_blade)
         return 0
 
@@ -166,9 +181,9 @@ class CutPlanner():
         data_cut = np.zeros(shape=self.data_filtered.shape) - 1
         self.plan_cutsurface(data_cut)
         self.planpath_blade()
+        self.planpath_baselink()
         #bladeplan = self.check_bladeposes(path, bladeplan)
         #Send bladeplan along service
-        self.clean_attributes()
         return
 
     def spin(self):

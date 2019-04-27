@@ -26,8 +26,8 @@ class P2PBehavior:
 
         # Set up ros constructs
         rospy.init_node('p2p_behavior')
-        rospy.Subscriber("/waypoint", WaypointPairLabeled, self.waypointpair_cb)
-        self.twist_pub = rospy.Publisher('/state_controller/cmd_behavior', TwistLabeled, queue_size=1)
+        rospy.Subscriber("/waypoints", WaypointPairLabeled, self.waypointpair_cb)
+        self.twist_pub = rospy.Publisher('/state_controller/cmd_behavior_twist', TwistLabeled, queue_size=1)
         self.rate = rospy.Rate(10)
         pass
 

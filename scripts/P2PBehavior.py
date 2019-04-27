@@ -40,6 +40,7 @@ class P2PBehavior:
             if self.is_active:
                 rospy.logerr('P2PBehavior: Cannot execute new command, already running')
             else:
+		rospy.loginfo("p2p - executing behavior")
                 self.wp_1 = msg.waypoint1
                 self.wp_2 = msg.waypoint2
                 self.is_active = True
@@ -52,6 +53,7 @@ class P2PBehavior:
         try:
             checkArrival = rospy.ServiceProxy('checkArrival', CheckArrival)
             response = checkArrival(self.wp_1, self.wp_2)
+            rospy.loginfo(response)
             return response.arrived
         except rospy.ServiceException, e:
             print "Service call failed: %s"%e

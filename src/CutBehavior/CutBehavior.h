@@ -1,5 +1,5 @@
-#ifndef CUT_PLANNER_H
-#define CUT_PLANNER_H
+#ifndef CUT_BEHAVIOR_H
+#define CUT_BEHAVIOR_H
 
 #include <string>
 #include <fstream>
@@ -12,10 +12,10 @@
 #include <tf/transform_listener.h>
 #include <laser_assembler/AssembleScans.h>
 
-class CutPlanner {
+class CutBehavior {
 
 public:
-  explicit CutPlanner();
+  explicit CutBehavior();
   int runInit(const cut_mission::WaypointPairLabeled& p, std::string f);
   int runInit(const cut_mission::WaypointPairLabeled& p, std_msgs::String f);
   int runHalt();
@@ -24,15 +24,10 @@ public:
 
 private:
   ros::NodeHandle n;
-  ros::Subscriber scan_sub;
+  ros::Rate rate;
   ros::Subscriber waypoint_sub;
   ros::Publisher twist_pub;
-  ros::Rate rate;
-  laser_geometry::LaserProjection* projecter;
-  tf::TransformListener* tf_listener;
-  std::string filename;
-  std::string datatype;
-  std::ofstream file;
+  ros::Publisher path_pub;
   bool is_running;
   std::string frame_id;
   std::string label;

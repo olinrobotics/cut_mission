@@ -21,7 +21,7 @@ class CutPlanner():
 
         rospy.init_node('cut_planner')
         self.service = rospy.Service('plan_bladepass', CutPlan, self.cutplan_call)
-        self.path_pub = rospy.Publisher('debug_path', Path, queue_size=0)
+        self.path_pub = rospy.Publisher('hitch_path', Path, queue_size=0)
         self.name = "cutplan"
         self.frame = 'map'
         self.file_location = None

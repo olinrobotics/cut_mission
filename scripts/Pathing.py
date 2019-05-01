@@ -61,17 +61,25 @@ class Pathing():
 		# Gets vector for tractor to travel on
 		# If on line, get vector along line
 		# If not on line, get vector towards line
-		vector = [None] * 2;
-		if(self.onTheLine(waypoint1, waypoint2)):
-			vector[1] = waypoint2.point.y - self.linear[1]
-			vector[0] = waypoint2.point.x - self.linear[0]
-			rospy.loginfo(vector)
-			return vector
-		else:
-			distance = self.distanceToLine(waypoint1, waypoint2)
-			vector[1] = -1*distance * (waypoint2.point.x - waypoint1.point.x)
-			vector[0] = distance * (waypoint2.point.y - waypoint1.point.y)
-			return vector
+		vector = [None] * 2
+		normVec = [None] * 2
+		distance = self.distanceToLine(waypoint1,waypoint2)
+		normVec[1] = self.waypoint2.point.y - self.waypoint1.point.y
+		normVec[0] = self.waypoint2.point.x - self.waypoint1.point.x
+		normVec = [normVec[0] / math.sqrt(normVec[0]**2 + normVec[1]**2), normVec[1] / math.sqrt(normVec[0]**2 + normVec[1]**2)]
+		vector[1] = normVec[1] - normVec[0]*distance
+		vector[0] = normVec[0] + normVec[1]*distance
+		# if(self.onTheLine(waypoint1, waypoint2)):
+		# 	vector[1] = waypoint2.point.y - self.linear[1]
+		# 	vector[0] = waypoint2.point.x - self.linear[0]
+		# 	rospy.loginfo(vector)
+		# 	return vector
+		# else:
+		# 	distance = self.distanceToLine(waypoint1, waypoint2)
+		# 	vector[1] = -1*distance * (waypoint2.point.x - waypoint1.point.x)
+		# 	vector[0] = distance * (waypoint2.point.y - waypoint1.point.y)
+		# 	return vector
+		
 
 	def onTheLine(self, waypoint1, waypoint2):
 		# Returns bool if tractor within threshold of line

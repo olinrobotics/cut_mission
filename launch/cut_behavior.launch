@@ -1,0 +1,12 @@
+<launch>
+
+  <node pkg="cut_mission" type="CutBehavior" name="cut_behavior" output="screen">
+    <remap from="/hitch_pose" to="/gazebo/tractor_sim_hitch"/>
+    <remap from="/hitch_path" to="/hitch_path"/>
+  </node>
+
+  <node pkg="cut_mission" type="CutPlanner.py" name="cut_planner" output="screen">
+    <remap from="/hitch_path" to="/hitch_path"/>
+  </node>
+
+</launch>

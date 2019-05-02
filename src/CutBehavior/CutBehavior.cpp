@@ -1,9 +1,7 @@
 /*
 Navigates between waypoints and relies on saved hitch positions to determine next best hitch command
 
-TODO: Make launch file for this
 TODO: Make this work with platform
-TODO: Use general topic names
 TODO: Add in waypoint navigation
 
 To Run:
@@ -34,8 +32,8 @@ rosrun cut_mission CutBehavior
 
 CutBehavior::CutBehavior()
  : rate(ros::Rate(15))
- , hitch_pose_sub(n.subscribe("/gazebo/tractor_sim_hitch", 1, &CutBehavior::CutBehavior::hitchCB, this)) // TODO: Replace this with general topic
- , hitch_path_sub(n.subscribe("/hitch_path", 1, &CutBehavior::CutBehavior::pathCB, this)) // TODO: Replace this with general topic
+ , hitch_pose_sub(n.subscribe("/hitch_pose", 1, &CutBehavior::CutBehavior::hitchCB, this))
+ , hitch_path_sub(n.subscribe("/hitch_path", 1, &CutBehavior::CutBehavior::pathCB, this)) 
 {}
 
 

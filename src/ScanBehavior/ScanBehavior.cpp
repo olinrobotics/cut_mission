@@ -123,7 +123,7 @@ void ScanBehavior::spin() {
       arrive_srv.request.waypoint2 = waypoints->waypoint2;
       arrive_client.call(arrive_srv);
 
-      if (arrive_srv.response.arrived.data == false) runHalt();  // If arrived at 2nd wp, stop
+      if (arrive_srv.response.arrived.data == true) runHalt();  // If arrived at 2nd wp, stop
       else {
         // Get twist msg from Pathing node, label, and publish
         twist_client.call(twist_srv);
@@ -154,14 +154,6 @@ int ScanBehavior::runHalt() {
   else
     printf("Service call failed\n");
   return 0;
-
-  return 0;
-}
-
-bool ScanBehavior::arrivedAtPoint() {
-  // Compares current position to waypoint
-  if (1) return false;
-  else return true;
 }
 
 int main(int argc, char** argv) {

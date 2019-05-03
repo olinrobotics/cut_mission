@@ -1,9 +1,18 @@
 <launch>
 
+  <!-- If 1, launch file assumes Pathing is started separately -->
+  <arg name="included" default="0"/> 
+
   <node pkg="cut_mission" type="CutBehavior" name="cut_behavior" output="screen">
     <remap from="/hitch_pose" to="/gazebo/tractor_sim_hitch"/>
     <remap from="/hitch_path" to="/hitch_path"/>
   </node>
+
+  <group unless="$(arg included)">
+
+    <node pkg="cut_mission" type="Pathing.py" name="pathing"/>
+
+  </group>
 
   <node pkg="cut_mission" type="CutPlanner.py" name="cut_planner" output="screen">
     <remap from="/hitch_path" to="/hitch_path"/>

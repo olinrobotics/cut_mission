@@ -12,9 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   sensor_msgs
   message_generation
-	laser_geometry
+  laser_geometry
   laser_assembler
-	tf
+  tf
 )
 
 ################################################

@@ -15,4 +15,7 @@
       <param name="mission_file" value="$(find cut_mission)/config/p2p_test.yaml"/>
     </node>
 
+    <!-- Start behavior nodes -->
+    <node pkg="cut_mission" type="P2PBehavior.py" name="p2p_behavior" output="screen"/>
+    
 </launch>

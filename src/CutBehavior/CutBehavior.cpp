@@ -13,40 +13,56 @@ rosrun cut_mission CutBehavior
 
 */
 
-
-
-#include <string>
 #include "CutBehavior.h"
+#include <string>
 #include <fstream>
 #include <ros/ros.h>
-#include <sensor_msgs/LaserScan.h>
-#include <cut_mission/WaypointPairLabeled.h>
+#include <cut_mission/WaypointPairLabeled.h>  // For recieving activate/disactive
 #include <std_msgs/String.h>
 #include <geometry_msgs/Twist.h>
-#include <laser_geometry/laser_geometry.h>
+#include <state_controller/TwistLabeled.h>    // For tractor cmds to sc
 #include <tf/transform_listener.h>
-#include <laser_assembler/AssembleScans.h>
 #include <nav_msgs/Odometry.h>
-#include <nav_msgs/Path.h>
+#include <nav_msgs/Path.h>                    // For read/write blade paths
 #include "KdTree.h"
 
 CutBehavior::CutBehavior()
  : rate(ros::Rate(15))
  , hitch_pose_sub(n.subscribe("/hitch_pose", 1, &CutBehavior::CutBehavior::hitchCB, this))
- , hitch_path_sub(n.subscribe("/hitch_path", 1, &CutBehavior::CutBehavior::pathCB, this)) 
-{}
+ , hitch_path_sub(n.subscribe("/hitch_path", 1, &CutBehavior::CutBehavior::pathCB, this))
+ , waypoint_sub(n.subscribe("/waypoints", 1, &CutBehavior::CutBehavior::waypointPairCB, this))
+ , twist_pub   (n.advertise<state_controller::TwistLabeled>("/twist", 1))
+ , twist_client(n.serviceClient<cut_mission::GetCurrTwist>("getCurrentTwist"))
+ , arrive_client(n.serviceClient<cut_mission::CheckArrival>("checkArrival"))
+ , waypoints(new cut_mission::WaypointPairLabeled())
+ , label("cut")
+ , is_running(false)
+{
 
+  // Ensure services for waypoint nav running properly
+  //TODO check for CutPlanner service
+  ros::service::waitForService("getCurrentTwist");
+  ros::service::waitForService("checkArrival");
+}
 
 void CutBehavior::spin() {
+  // Keeps node updating at rate attr. frequency
+
   while (n.ok()) {
+
     std::cout<<hitch_pose.position.x<<std::endl;
 
     // Check if there's a hitch path available TODO: make this based on whether behavior is active
-    if (running) {
+    if (is_running) {
+
+      // Check for arrival at wp2
+
+      // If arrived at wp2, stop
+      // Else, execute update step
+
       std::cout<<"Nearest Height:"<<std::endl;
       std::cout<<getNearestHeight()<<std::endl;
     }
-
 
     ros::spinOnce();  // Update callbacks
     rate.sleep();     // Standardize output rate
@@ -72,7 +88,16 @@ void CutBehavior::pathCB(const nav_msgs::Path& msg) {
   root = new_kd.make_tree(arr, n, 0, 2);
   kd = &new_kd;
 
-  running = true;
+  is_running = true;
+}
+
+void CutBehavior::waypointPairCB(const cut_mission::WaypointPairLabeled& msg) {
+  // If msg has behavior label, start behavior
+  if (label == msg.waypoint1.behavior.data) {
+    if (runInit(msg)) ROS_WARN("%s - Unable to initialize behavior", label.c_str());
+  } else {
+    if (runHalt()) ROS_WARN("%s - Unable to halt behavior", label.c_str());
+  }
 }
 
 struct kd_node_t * CutBehavior::pathToArray(nav_msgs::Path path) {
@@ -105,12 +130,35 @@ double CutBehavior::getNearestHeight() {
   return nearest_node->value;
 }
 
+int CutBehavior::runInit(const cut_mission::WaypointPairLabeled& p) {
+  // Starts behavior if not running
+  if (is_running) {
+    ROS_WARN("%s - already executing a cut, cannot complete request", label.c_str());
+    return 1;
+  }
+  ROS_INFO("%s - starting behavior", label.c_str());
+  waypoints->waypoint1 = p.waypoint1;
+  waypoints->waypoint2 = p.waypoint2;
+
+  is_running = true;
+  return 0;
+}
+
+int CutBehavior::runHalt() {
+  // Stops behavior if running
+  if (!is_running) {
+    ROS_WARN("%s - not executing a cut, nothing to halt", label.c_str());
+    return 1;
+  }
+  ROS_INFO("%s - halting behavior", label.c_str());
+  is_running = false;
+}
+
 int main(int argc, char** argv) {
    ros::init(argc, argv, "CutBehavior");
    CutBehavior cut;
    cut.spin();
 }
-
 
 /*
 CURRENT STATUS
@@ -122,21 +170,7 @@ eventually will need to build in transforms between tractor and hitch
 for physical platform -
   see http://wiki.ros.org/tf/Tutorials/Writing%20a%20tf%20broadcaster%20%28C%2B%2B%29 for writing tf publisher for main chassis
   manually use hitch commands to publish hitch tf (can use same code, just use different frame id)
-
-
-
-
-
-
 */
-
-
-
-
-
-
-
-
 
 //   tf::Transform map_to_tractor;
 //   tf::poseMsgToTF(p->pose.pose, tractor_pose);

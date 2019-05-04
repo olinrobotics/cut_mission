@@ -1,0 +1,4 @@
+Waypoint waypoint1
+Waypoint waypoint2
+---
+std_msgs/Bool arrived

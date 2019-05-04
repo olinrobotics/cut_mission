@@ -1,0 +1,21 @@
+<launch>
+    <!-- Load behaviors  -->
+    <rosparam command="load" file="$(find cut_mission)/config/behaviors.yaml" />
+    <!-- TODO @cnovak Make behaviors.yaml auto-update, prompt user for overwrite -->
+
+    <!-- Start state controller -->
+    <node pkg="state_controller" type="MainState" name="state_controller" output="screen" launch-prefix="gnome-terminal --command"/>
+
+    <!-- Start necessary behaviors -->
+    <include file="$(find cut_mission)/launch/scan_behavior.launch"/>
+    <include file="$(find state_controller)/launch/teleop.launch"/>
+
+    <!-- Start mission planner -->
+    <node pkg="cut_mission" type="MissionPlanner.py" name="cut_mission" output="screen">
+      <param name="mission_file" value="$(find cut_mission)/config/p2p_test.yaml"/>
+    </node>
+
+    <!-- Start behavior nodes -->
+    <node pkg="cut_mission" type="P2PBehavior.py" name="p2p_behavior" output="screen"/>
+    
+</launch>

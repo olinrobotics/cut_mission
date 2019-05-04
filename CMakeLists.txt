@@ -73,7 +73,10 @@ include_directories(
 )
 
 add_executable( ScanBehavior src/ScanBehavior/ScanBehavior.cpp )
+add_executable( CutBehavior src/CutBehavior/CutBehavior.cpp )
 
 target_link_libraries( ScanBehavior ${catkin_LIBRARIES} )
+target_link_libraries( CutBehavior ${catkin_LIBRARIES} )
 
 add_dependencies( ScanBehavior ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies( CutBehavior ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

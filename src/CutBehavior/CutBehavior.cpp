@@ -34,6 +34,7 @@ CutBehavior::CutBehavior()
  , twist_pub   (n.advertise<state_controller::TwistLabeled>("/twist", 1))
  , twist_client(n.serviceClient<cut_mission::GetCurrTwist>("getCurrentTwist"))
  , arrive_client(n.serviceClient<cut_mission::CheckArrival>("checkArrival"))
+ , cut_client(n.serviceClient<cut_mission::CutPlan>("cutPlan"))
  , waypoints(new cut_mission::WaypointPairLabeled())
  , label("cut")
  , is_running(false)
@@ -43,6 +44,7 @@ CutBehavior::CutBehavior()
   //TODO check for CutPlanner service
   ros::service::waitForService("getCurrentTwist");
   ros::service::waitForService("checkArrival");
+  ros::service::waitForService("cutPlan");
 }
 
 void CutBehavior::spin() {
@@ -136,6 +138,7 @@ int CutBehavior::runInit(const cut_mission::WaypointPairLabeled& p) {
     ROS_WARN("%s - already executing a cut, cannot complete request", label.c_str());
     return 1;
   }
+
   ROS_INFO("%s - starting behavior", label.c_str());
   waypoints->waypoint1 = p.waypoint1;
   waypoints->waypoint2 = p.waypoint2;

@@ -22,12 +22,8 @@ class CutBehavior {
 
 public:
   explicit CutBehavior();
-//   int runInit(const cut_mission::WaypointPairLabeled& p, std::string f);
-//   int runInit(const cut_mission::WaypointPairLabeled& p, std_msgs::String f);
-//   int runHalt();
   void spin();
-//   bool arrivedAtPoint();
-//
+
 private:
   ros::NodeHandle n;
   ros::Subscriber hitch_pose_sub;
@@ -36,6 +32,7 @@ private:
   ros::Publisher twist_pub;
   ros::ServiceClient twist_client;
   ros::ServiceClient arrive_client;
+  ros::ServiceClient cut_client;
 
   ros::Rate rate;
 

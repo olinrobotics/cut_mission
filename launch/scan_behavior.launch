@@ -12,7 +12,7 @@
   <node pkg="cut_mission" type="ScanBehavior" name="scan_behavior" output="screen">
     <remap from="/waypoints" to="/mission_planner/cmd_waypoints"/>
     <remap from="/twist" to="/state_controller/cmd_behavior_twist"/>
-    <param name="file_name" value="$(find cut_mission)/config/test.txt"/>
+    <param name="file_name" value="$(find cut_mission)/data/scan_file.csv"/>
   </node>
 
 </launch>

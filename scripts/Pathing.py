@@ -16,7 +16,7 @@ class Pathing():
 		waypoint1 = None
 		waypoint2 = None
 		self.listener = tf.TransformListener()
-		self.threshold = 1.0	# Dist from path to count as on path (m)
+		self.threshold = 0.5	# Dist from path to count as on path (m)
 		self.speed = 0.75		# Percentage velocity (1)
 		rospy.spin()
 
@@ -45,15 +45,21 @@ class Pathing():
 		rospy.loginfo(self.linear)
 		vector = self.waypointsToVectors(waypoint1, waypoint2)
 		newTwist = Twist()
-		newTwist.linear.x = self.speed
-		angle = math.atan2(vector[1], vector[0]) - self.angular[2]
+		newTwist.linear.x = math.sqrt((self.linear[0] - waypoint2.point.x)**2 + (self.linear[1]-waypoint2.point.y)**2) / 5
+		if(newTwist.linear.x > self.speed):
+			newTwist.linear.x = self.speed
+		angle = math.atan2(vector[1], vector[0]) - self.angular[2] * math.pi
 		rospy.loginfo(angle)
 		angle = angle / (math.pi / 4)
+		if(angle > math.pi):
+			angle = angle - 2*math.pi
+		elif(angle < -math.pi):
+			angle = angle + 2*math.pi
 		if(angle > 1):
 			angle = 1
 		elif(angle < -1):
 			angle = -1
-		newTwist.angular.z = -angle
+		newTwist.angular.z = angle
 		rospy.loginfo(newTwist)
 		return newTwist
 
@@ -70,26 +76,6 @@ class Pathing():
 		vector[1] = normVec[1] - normVec[0]*distance
 		vector[0] = normVec[0] + normVec[1]*distance
 		return vector
-		# if(self.onTheLine(waypoint1, waypoint2)):
-		# 	vector[1] = waypoint2.point.y - self.linear[1]
-		# 	vector[0] = waypoint2.point.x - self.linear[0]
-		# 	rospy.loginfo(vector)
-		# 	return vector
-		# else:
-		# 	distance = self.distanceToLine(waypoint1, waypoint2)
-		# 	vector[1] = -1*distance * (waypoint2.point.x - waypoint1.point.x)
-		# 	vector[0] = distance * (waypoint2.point.y - waypoint1.point.y)
-		# 	return vector
-		
-
-	def onTheLine(self, waypoint1, waypoint2):
-		# Returns bool if tractor within threshold of line
-
-		distance = self.distanceToLine(waypoint1, waypoint2)
-		if(abs(distance) < self.threshold):
-			return True
-		else:
-			return False
 
 	def distanceToLine(self, waypoint1, waypoint2):
 		# gives distance to line between waypoints

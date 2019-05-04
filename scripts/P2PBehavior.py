@@ -6,7 +6,7 @@ from cut_mission.msg import Waypoint, WaypointPairLabeled
 from geometry_msgs.msg import Twist
 from state_controller.msg import TwistLabeled
 from cut_mission.srv import *
-from std_msgs.msg import String
+from std_msgs.msg import String, Bool
 
 class P2PBehavior:
     ''' @brief Behavior class for basic waypoint navigation
@@ -62,6 +62,11 @@ class P2PBehavior:
     def reset_behavior(self):
         ''' @brief clears metadata, prepares for next activation
             '''
+        rospy.loginfo("here")
+        emptyTwist = TwistLabeled()
+        emptyTwist.label = String("p2p")
+        rospy.loginfo(emptyTwist)
+        self.twist_pub.publish(emptyTwist)
         self.is_active = False
         self.wp_1 = None
         self.wp_2 = None
@@ -73,7 +78,7 @@ class P2PBehavior:
 
         while not rospy.is_shutdown():
             if self.is_active:
-                if self.check_arrival():
+                if self.check_arrival() == Bool(False):
                     msg = TwistLabeled()
                     msg.label = String("p2p")
                     rospy.wait_for_service('getCurrentTwist')

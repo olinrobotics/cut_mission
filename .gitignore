@@ -1,4 +1,3 @@
 *.bag
 *.pyc
-/config/*.txt
 *.swp

@@ -17,24 +17,39 @@ rosrun cut_mission CutBehavior
 #include <string>
 #include <fstream>
 #include <ros/ros.h>
-#include <cut_mission/WaypointPairLabeled.h>  // For recieving activate/disactive
-#include <std_msgs/String.h>
-#include <geometry_msgs/Twist.h>
-#include <state_controller/TwistLabeled.h>    // For tractor cmds to sc
 #include <tf/transform_listener.h>
+
+// Standard ROS Messages
+#include <std_msgs/String.h>
+#include <sensor_msgs/LaserScan.h>
+#include <geometry_msgs/Twist.h>
 #include <nav_msgs/Odometry.h>
 #include <nav_msgs/Path.h>                    // For read/write blade paths
+
+// Custom ROS Messages
+#include <state_controller/TwistLabeled.h>    // For tractor cmds to sc
+
+// ROS services
+#include <cut_mission/GetCurrTwist.h>
+#include <cut_mission/WaypointPairLabeled.h>  // For recieving activate/disactive
+
 #include "KdTree.h"
 
 CutBehavior::CutBehavior()
  : rate(ros::Rate(15))
+
+ // Publishers & Subscribers
  , hitch_pose_sub(n.subscribe("/hitch_pose", 1, &CutBehavior::CutBehavior::hitchCB, this))
  , hitch_path_sub(n.subscribe("/hitch_path", 1, &CutBehavior::CutBehavior::pathCB, this))
  , waypoint_sub(n.subscribe("/waypoints", 1, &CutBehavior::CutBehavior::waypointPairCB, this))
  , twist_pub   (n.advertise<state_controller::TwistLabeled>("/twist", 1))
+
+ // Service Clients
  , twist_client(n.serviceClient<cut_mission::GetCurrTwist>("getCurrentTwist"))
  , arrive_client(n.serviceClient<cut_mission::CheckArrival>("checkArrival"))
  , cut_client(n.serviceClient<cut_mission::CutPlan>("cutPlan"))
+
+ // Class Members
  , waypoints(new cut_mission::WaypointPairLabeled())
  , label("cut")
  , is_running(false)

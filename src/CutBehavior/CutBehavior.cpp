@@ -40,7 +40,6 @@ CutBehavior::CutBehavior()
 
  // Publishers & Subscribers
  , hitch_pose_sub(n.subscribe("/hitch_pose", 1, &CutBehavior::CutBehavior::hitchCB, this))
- , hitch_path_sub(n.subscribe("/hitch_path", 1, &CutBehavior::CutBehavior::pathCB, this))
  , waypoint_sub(n.subscribe("/waypoints", 1, &CutBehavior::CutBehavior::waypointPairCB, this))
  , twist_pub   (n.advertise<state_controller::TwistLabeled>("/twist", 1))
 
@@ -54,9 +53,15 @@ CutBehavior::CutBehavior()
  , label("cut")
  , is_running(false)
 {
+  // Load Parameters
+  n.getParam("/cut_behavior/file_name", filename);
 
-  // Ensure services for waypoint nav running properly
-  //TODO check for CutPlanner service
+  if (filename == "") {
+    ROS_ERROR("CutBehavior: cannot find /cut_behavior/file_name parameter - did you run the launch file?");
+    ros::shutdown();
+  }
+
+  // Ensure services are running properly
   ros::service::waitForService("getCurrentTwist");
   ros::service::waitForService("checkArrival");
   ros::service::waitForService("cutPlan");
@@ -72,15 +77,25 @@ void CutBehavior::spin() {
     // Check if there's a hitch path available TODO: make this based on whether behavior is active
     if (is_running) {
 
-      // Check for arrival at wp2
+      // Call Pathing node srv to see if arrived at wp2
+      arrive_srv.request.waypoint1 = waypoints->waypoint1;
+      arrive_srv.request.waypoint2 = waypoints->waypoint2;
+      arrive_client.call(arrive_srv);
 
-      // If arrived at wp2, stop
-      // Else, execute update step
+      if (arrive_srv.response.arrived.data == true) runHalt();  // If arrived at 2nd wp, stop
+      else {
+        // Get twist msg from Pathing node, label, and publish
+        twist_client.call(twist_srv);
+        auto msg = state_controller::TwistLabeled();
+        msg.label.data = label;
+        msg.twist = twist_srv.response.vector;
+        twist_pub.publish(msg);
 
-      std::cout<<"Nearest Height:"<<std::endl;
-      std::cout<<getNearestHeight()<<std::endl;
+        // Get nearest saved blade height command and publish
+        std::cout<<"Nearest Height:"<<std::endl;
+        std::cout<<getNearestHeight()<<std::endl;
+      }
     }
-
     ros::spinOnce();  // Update callbacks
     rate.sleep();     // Standardize output rate
   }
@@ -90,15 +105,15 @@ void CutBehavior::hitchCB(const geometry_msgs::Pose& msg) {
    hitch_pose = msg;
 }
 
-void CutBehavior::pathCB(const nav_msgs::Path& msg) {
+
+void CutBehavior::initPath() {
   // Hitch path callback function - creates kd tree to optimize for nearest neighbor search
 
-  hitch_path = msg;
-  int n = msg.poses.size();
+  int n = hitch_path.poses.size();
 
   // Make array from hitch path message
   kd_node_t * arr;
-  arr = pathToArray(msg);
+  arr = pathToArray(hitch_path);
 
   // Create kd tree using formatted array and keep track of the root node
   KdTree new_kd;
@@ -157,6 +172,11 @@ int CutBehavior::runInit(const cut_mission::WaypointPairLabeled& p) {
   ROS_INFO("%s - starting behavior", label.c_str());
   waypoints->waypoint1 = p.waypoint1;
   waypoints->waypoint2 = p.waypoint2;
+
+  cut_srv.request.filepath = filename;
+  cut_client.call(cut_srv);
+  hitch_path = cut_srv.response.toolpath;
+  initPath();
 
   is_running = true;
   return 0;

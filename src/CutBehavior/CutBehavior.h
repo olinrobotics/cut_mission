@@ -39,7 +39,6 @@ private:
 
   // Publishers & Subscribers
   ros::Subscriber hitch_pose_sub;
-  ros::Subscriber hitch_path_sub;
   ros::Subscriber waypoint_sub;
   ros::Publisher twist_pub;
 
@@ -48,7 +47,13 @@ private:
   ros::ServiceClient arrive_client;
   ros::ServiceClient cut_client;
 
+  // Services
+  cut_mission::GetCurrTwist twist_srv;
+  cut_mission::CheckArrival arrive_srv;
+  cut_mission::CutPlan cut_srv;
+
   // Class Member Variables
+  std::string filename;
   cut_mission::WaypointPairLabeled *waypoints;
   std::string label;
   bool is_running;
@@ -60,11 +65,11 @@ private:
   struct kd_node_t * pathToArray(nav_msgs::Path path);
   struct kd_node_t *root;
   KdTree* kd;
+  void initPath();
 
   // Callback Functions
   void scanCB(const sensor_msgs::LaserScan& msg);
   void hitchCB(const geometry_msgs::Pose& msg);
-  void pathCB(const nav_msgs::Path& msg);
   void waypointPairCB(const cut_mission::WaypointPairLabeled& msg);
 };
 

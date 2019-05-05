@@ -28,6 +28,7 @@ rosrun cut_mission CutBehavior
 
 // Custom ROS Messages
 #include <state_controller/TwistLabeled.h>    // For tractor cmds to sc
+#include <state_controller/PoseLabeled.h>
 
 // ROS services
 #include <cut_mission/GetCurrTwist.h>
@@ -41,7 +42,8 @@ CutBehavior::CutBehavior()
  // Publishers & Subscribers
  , hitch_pose_sub(n.subscribe("/hitch_pose", 1, &CutBehavior::CutBehavior::hitchCB, this))
  , waypoint_sub(n.subscribe("/waypoints", 1, &CutBehavior::CutBehavior::waypointPairCB, this))
- , twist_pub   (n.advertise<state_controller::TwistLabeled>("/twist", 1))
+ , twist_pub(n.advertise<state_controller::TwistLabeled>("/twist", 1))
+ , hitch_pub(n.advertise<state_controller::PoseLabeled>("/hitch", 1))
 
  // Service Clients
  , twist_client(n.serviceClient<cut_mission::GetCurrTwist>("getCurrentTwist"))
@@ -71,12 +73,8 @@ void CutBehavior::spin() {
   // Keeps node updating at rate attr. frequency
 
   while (n.ok()) {
-
-    std::cout<<hitch_pose.position.x<<std::endl;
-
     // Check if there's a hitch path available TODO: make this based on whether behavior is active
     if (is_running) {
-
       // Call Pathing node srv to see if arrived at wp2
       arrive_srv.request.waypoint1 = waypoints->waypoint1;
       arrive_srv.request.waypoint2 = waypoints->waypoint2;
@@ -86,14 +84,21 @@ void CutBehavior::spin() {
       else {
         // Get twist msg from Pathing node, label, and publish
         twist_client.call(twist_srv);
-        auto msg = state_controller::TwistLabeled();
-        msg.label.data = label;
-        msg.twist = twist_srv.response.vector;
-        twist_pub.publish(msg);
+        auto twist_msg = state_controller::TwistLabeled();
+        twist_msg.label.data = label;
+        twist_msg.twist = twist_srv.response.vector;
+        twist_pub.publish(twist_msg);
 
         // Get nearest saved blade height command and publish
-        std::cout<<"Nearest Height:"<<std::endl;
-        std::cout<<getNearestHeight()<<std::endl;
+        auto hitch_msg = state_controller::PoseLabeled();
+        hitch_msg.label.data = label;
+        hitch_msg.pose.position.z = getNearestHeight() - hitch_pose.position.z; // TODO: USE POSE TO COMPUTE ACTUAL POSITION
+
+        hitch_pub.publish(hitch_msg);
+
+        // std::cout<<"Nearest Height:"<<std::endl;
+        // std::cout<<getNearestHeight()<<std::endl;
+
       }
     }
     ros::spinOnce();  // Update callbacks
@@ -120,6 +125,7 @@ void CutBehavior::initPath() {
   root = new_kd.make_tree(arr, n, 0, 2);
   kd = &new_kd;
 
+  std::cout<<"running"<<std::endl;
   is_running = true;
 }
 

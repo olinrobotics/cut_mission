@@ -41,6 +41,7 @@ private:
   ros::Subscriber hitch_pose_sub;
   ros::Subscriber waypoint_sub;
   ros::Publisher twist_pub;
+  ros::Publisher hitch_pub;
 
   // Service Clients
   ros::ServiceClient twist_client;

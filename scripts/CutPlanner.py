@@ -176,7 +176,7 @@ class CutPlanner():
             @return ROS Path verified blade poses
             """
 
-        self.load_data(file_path)
+        if self.load_data(file_path): return
         self.filter_data()
         data_cut = np.zeros(shape=self.data_filtered.shape) - 1
         self.plan_cutsurface(data_cut)

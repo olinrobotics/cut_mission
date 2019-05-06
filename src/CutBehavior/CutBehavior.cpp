@@ -110,7 +110,6 @@ void CutBehavior::hitchCB(const geometry_msgs::Pose& msg) {
    hitch_pose = msg;
 }
 
-
 void CutBehavior::initPath() {
   // Hitch path callback function - creates kd tree to optimize for nearest neighbor search
 

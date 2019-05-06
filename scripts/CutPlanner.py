@@ -57,8 +57,8 @@ class CutPlanner():
             """
         try:
             with open(file, 'r') as csvfile:
-                reader = csv.reader(csvfile, delimiter=",", quotechar="|")
-                string_data = [[string.split('|') for string in row] for row in reader] # Massive parsing step
+                reader = csv.reader(csvfile, delimiter=",", quotechar="\"")
+                string_data = [[string.split(',') for string in row] for row in reader] # Massive parsing step
                 self.data_raw = np.asarray(string_data, dtype=np.float64, order='C')
                 rospy.loginfo("%s - finished loading raw data", self.name)
                 return 0

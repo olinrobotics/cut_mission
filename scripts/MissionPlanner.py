@@ -22,7 +22,7 @@ class MissionPlanner:
         self.behavior_pub = rospy.Publisher('/mission_planner/out_behavior', WaypointPairLabeled, queue_size=1)
         self.wpvis_pub = rospy.Publisher('/mission_planner/vis_waypoints', MarkerArray, queue_size=1)
         rospy.Subscriber('/mission_planner/in_behavior', String, self.in_behavior_cb)
-
+        self.rate = rospy.Rate(1)
         self.name = 'mp'
 
         # Set up mission
@@ -70,6 +70,9 @@ class MissionPlanner:
                 msg.behavior = doc['waypoints'][i]['behavior']
                 msg.forward = bool(doc['waypoints'][i]['forward'])
                 msg.autocontinue = bool(doc['waypoints'][i]['autocontinue'])
+                msg.point.x = int(doc['waypoints'][i]['point']['x'])
+                msg.point.y = int(doc['waypoints'][i]['point']['y'])
+                msg.point.z = int(doc['waypoints'][i]['point']['z'])
                 self.waypoints[i] = msg
                 rospy.loginfo("%s - Loaded waypoint %i", self.name, self.waypoints[i].index)
 
@@ -79,10 +82,11 @@ class MissionPlanner:
         """ @brief init marker attr based on loaded waypoints
             """
 
-        self.markers = [None] * len(self.waypoints)
+        self.markers = MarkerArray()
         for i in range(len(self.waypoints)):
             marker = Marker()
-            marker.type = 2
+            marker.type = marker.SPHERE
+            marker.action = marker.ADD
             marker.header = Header()
             marker.header.frame_id = '/odom'
             marker.header.stamp = rospy.get_rostime()
@@ -92,10 +96,11 @@ class MissionPlanner:
             marker.pose.position.z = self.waypoints[i].point.z
             marker.pose.orientation.x = marker.pose.orientation.y = marker.pose.orientation.z = 0
             marker.pose.orientation.w = 1.0
-            marker.scale.x = marker.scale.y = marker.scale.z = 1.0
-            marker.color.r = marker.color.g = marker.color.b = 0.0
-            marker.color.a = 1.0
-            self.markers[i] = marker
+            marker.scale.x = marker.scale.y = marker.scale.z = 0.5
+            marker.color.g = marker.color.b = 0.0
+            marker.color.a = marker.color.r = 1.0
+            marker.lifetime = rospy.Duration()
+            self.markers.markers.append(marker)
 
     def print_mission(self):
         """ @brief prints mission waypts & segments
@@ -170,6 +175,8 @@ class MissionPlanner:
         msg = WaypointPairLabeled()
         msg.label = self.behaviors[self.waypoints[wp_index].behavior]
         msg.waypoint1 = self.waypoints[wp_index]
+        self.markers.markers[wp_index].color.g = 1.0
+        self.markers.markers[wp_index].color.r = 0.0
         if not len(self.waypoints) == wp_index + 1:
             msg.waypoint2 = self.waypoints[wp_index + 1]
         else:
@@ -190,6 +197,8 @@ class MissionPlanner:
         # TODO:run behavior end function
         self.state_pub.publish(self.behaviors['safety'])
         rospy.loginfo("%s - ending behavior: %s", self.name, self.waypoints[wp_index].behavior)
+        self.markers.markers[wp_index].color.r = 1.0
+        self.markers.markers[wp_index].color.g = 0.0
         if not self.waypoints[wp_index].autocontinue:
             pass
             #TODO Add pause for user input here
@@ -198,7 +207,8 @@ class MissionPlanner:
 
     def run(self):
         while not rospy.is_shutdown():
-            rospy.spin()
+            self.wpvis_pub.publish(self.markers)
+            self.rate.sleep()
 
 if __name__ == "__main__":
     m1 = MissionPlanner()

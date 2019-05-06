@@ -14,7 +14,7 @@ waypoints:
     autocontinue: false
   1:
     index: 1
-    point: {x: 100, y: 100, z: 20}
+    point: {x: 100, y: 100, z: 0}
     frame: odom
     behavior: safety
     forward: none

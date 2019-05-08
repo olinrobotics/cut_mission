@@ -21,14 +21,18 @@ class Pathing():
 		rospy.spin()
 
 	def checkArrival(self, req):
-		#linear doesn't have x????
+		# checks whether the tractor is clone enough to the 2nd waypoint
+		# param: req, the pair of waypoints
+		# returns a ROS Bool
 		self.linear, self.angular = self.listener.lookupTransform("/odom", "/base_link", rospy.Time())
 		vector = self.odomToWaypoint(req.waypoint2)
 		if(vector.x**2 + vector.y**2 < self.threshold**2): return Bool(True)
 		else: return Bool(False)
 
 	def odomToWaypoint(self, waypoint2):
-		print(waypoint2.point.y)
+		# gives the vector from the odometry to the 2nd waypoint
+		# param: 2nd waypoint
+		# returns a point vector
 		vector = Point()
 		vector.y = waypoint2.point.y - self.linear[1]
 		vector.x = waypoint2.point.x - self.linear[0]
@@ -36,6 +40,10 @@ class Pathing():
 
 	def getCurrentTwist(self, req):
 		# Publish twist msg based on current tractor position
+		# param: the pair of waypoints
+		# returns a twist
+		# notes: the convert to ackermann takes a number from -1 to 1, so the final turn must be converted from radians to -1 to 1
+		# ex: if the radians is pi / 4, you want to pass 1 because 1 corresponds to 45 degrees
 		waypoint1 = req.waypoint1
 		waypoint2 = req.waypoint2
 		self.linear, self.angular = self.listener.lookupTransform("/odom", "/base_link", rospy.Time())
@@ -58,9 +66,10 @@ class Pathing():
 		return newTwist
 
 	def waypointsToVectors(self, waypoint1, waypoint2):
-		# Gets vector for tractor to travel on
-		# If on line, get vector along line
-		# If not on line, get vector towards line
+		# gets vector from tractor odom to the point 1 meter in front on the line.
+		# if the tractor is off the line, it will point towards the point 1 meter forward from the perpendicular point of the line
+		# param: waypoint 1 and 2
+		# returns a vector
 		vector = [None] * 2
 		normVec = [None] * 2
 		distance = self.distanceToLine(waypoint1,waypoint2)
@@ -76,7 +85,8 @@ class Pathing():
 
 	def distanceToLine(self, waypoint1, waypoint2):
 		# gives distance to line between waypoints
-
+		# param: waypoints 1 and 2
+		# returns a distance
 		x1 = waypoint1.point.x
 		x2 = waypoint2.point.x
 		y1 = waypoint1.point.y

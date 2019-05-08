@@ -10,12 +10,12 @@ waypoints:
     point: {x: 0, y: 0, z: 0}
     frame: odom
     behavior: p2p
-    direction: forward
+    forward: true
     autocontinue: false
   1:
     index: 1
-    point: {x: 100, y: 100, z: 20}
+    point: {x: 100, y: 100, z: 0}
     frame: odom
     behavior: safety
-    direction: none
+    forward: none
     autocontinue: none

@@ -26,10 +26,8 @@ class Pathing():
 		# returns a ROS Bool
 		self.linear, self.angular = self.listener.lookupTransform("/odom", "/base_link", rospy.Time())
 		vector = self.odomToWaypoint(req.waypoint2)
-		if(vector.x**2 + vector.y**2 < self.threshold**2):
-			return Bool(True)
-		else:
-			return Bool(False)
+		if(vector.x**2 + vector.y**2 < self.threshold**2): return Bool(True)
+		else: return Bool(False)
 
 	def odomToWaypoint(self, waypoint2):
 		# gives the vector from the odometry to the 2nd waypoint
@@ -38,7 +36,6 @@ class Pathing():
 		vector = Point()
 		vector.y = waypoint2.point.y - self.linear[1]
 		vector.x = waypoint2.point.x - self.linear[0]
-		rospy.loginfo(vector)
 		return vector
 
 	def getCurrentTwist(self, req):
@@ -46,20 +43,17 @@ class Pathing():
 		# param: the pair of waypoints
 		# returns a twist
 		# notes: the convert to ackermann takes a number from -1 to 1, so the final turn must be converted from radians to -1 to 1
-		# ex: if the radians is pi / 4, you want to pass 1 because 1 corresponds to 45 degrees 
+		# ex: if the radians is pi / 4, you want to pass 1 because 1 corresponds to 45 degrees
 		waypoint1 = req.waypoint1
 		waypoint2 = req.waypoint2
 		self.linear, self.angular = self.listener.lookupTransform("/odom", "/base_link", rospy.Time())
-		rospy.loginfo(self.angular[2])
-		rospy.loginfo(self.linear)
 		vector = self.waypointsToVectors(waypoint1, waypoint2)
 		newTwist = Twist()
 		newTwist.linear.x = math.sqrt((self.linear[0] - waypoint2.point.x)**2 + (self.linear[1]-waypoint2.point.y)**2) / 5
 		if(newTwist.linear.x > self.speed):
 			newTwist.linear.x = self.speed
 		angle = math.atan2(vector[1], vector[0]) - self.angular[2] * math.pi
-		rospy.loginfo(angle)
-		angle = angle / (math.pi / 4) 
+		angle = angle / (math.pi / 4)
 		if(angle > math.pi):
 			angle = angle - 2*math.pi
 		elif(angle < -math.pi):
@@ -69,7 +63,6 @@ class Pathing():
 		elif(angle < -1):
 			angle = -1
 		newTwist.angular.z = angle
-		rospy.loginfo(newTwist)
 		return newTwist
 
 	def waypointsToVectors(self, waypoint1, waypoint2):
@@ -100,7 +93,6 @@ class Pathing():
 		c = x1*y2 - x2*y1
 		if (a == b == 0): distance = 0
 		else: distance = (a*self.linear[0] + b*self.linear[1] + c) / (math.sqrt(a**2 + b**2))
-		rospy.loginfo(distance)
 		return distance
 
 if __name__ == "__main__":

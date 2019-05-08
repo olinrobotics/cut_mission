@@ -66,6 +66,9 @@ class Pathing():
 		distance = self.distanceToLine(waypoint1,waypoint2)
 		normVec[1] = waypoint2.point.y - waypoint1.point.y
 		normVec[0] = waypoint2.point.x - waypoint1.point.x
+		rospy.loginfo(normVec[1])
+		rospy.loginfo(normVec[0])
+
 		normVec = [normVec[0] / math.sqrt(normVec[0]**2 + normVec[1]**2), normVec[1] / math.sqrt(normVec[0]**2 + normVec[1]**2)]
 		vector[1] = normVec[1] - normVec[0]*distance
 		vector[0] = normVec[0] + normVec[1]*distance

@@ -83,6 +83,8 @@ void CutBehavior::spin() {
       if (arrive_srv.response.arrived.data == true) runHalt();  // If arrived at 2nd wp, stop
       else {
         // Get twist msg from Pathing node, label, and publish
+        twist_srv.request.waypoint1 = waypoints->waypoint1;
+        twist_srv.request.waypoint2 = waypoints->waypoint2;
         twist_client.call(twist_srv);
         auto twist_msg = state_controller::TwistLabeled();
         twist_msg.label.data = label;

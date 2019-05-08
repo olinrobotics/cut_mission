@@ -1,0 +1,23 @@
+roscore
+roslaunch tractor_sim_gazebo bringup.launch
+rosrun crawler ConvertToAckermann.py
+roslaunch state_controller mainstate.launch
+roslaunch cut_mission cut_behavior.launch
+
+
+rostopic echo /state_controller/cmd_behavior_twist
+rostopic echo /cmd_vel
+
+rostopic pub /waypoints (publish some nonzero command with cut)
+rostopic pub /state_controller/cmd_activate (bool=true)
+
+
+TODO:
+make world file with path
+make launch file + script that run both one after another
+fix activate bug
+figure out which labels are needed in waypoint (are redundant)
+
+Current progress:
+halting behavior successful
+hitch does move

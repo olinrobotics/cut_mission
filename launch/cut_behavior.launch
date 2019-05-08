@@ -5,7 +5,7 @@
 
   <group unless="$(arg included)">
 
-    <node pkg="cut_mission" type="Pathing.py" name="pathing"/>
+    <node pkg="cut_mission" type="Pathing.py" name="pathing" output="screen"/>
 
   </group>
 

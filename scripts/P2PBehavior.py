@@ -53,7 +53,6 @@ class P2PBehavior:
         try:
             checkArrival = rospy.ServiceProxy('checkArrival', CheckArrival)
             response = checkArrival(self.wp_1, self.wp_2)
-            rospy.loginfo(response)
             return response.arrived
         except rospy.ServiceException, e:
             print "Service call failed: %s"%e
@@ -62,10 +61,8 @@ class P2PBehavior:
     def reset_behavior(self):
         ''' @brief clears metadata, prepares for next activation
             '''
-        rospy.loginfo("here")
         emptyTwist = TwistLabeled()
         emptyTwist.label = String("p2p")
-        rospy.loginfo(emptyTwist)
         self.twist_pub.publish(emptyTwist)
         self.is_active = False
         self.wp_1 = None

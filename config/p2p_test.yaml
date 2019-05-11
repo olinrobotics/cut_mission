@@ -14,7 +14,28 @@ waypoints:
     autocontinue: false
   1:
     index: 1
+    point: {x: 100, y: 0, z: 0}
+    frame: odom
+    behavior: p2p
+    forward: true
+    autocontinue: false
+  2:
+    index: 2
     point: {x: 100, y: 100, z: 0}
+    frame: odom
+    behavior: p2p
+    forward: true
+    autocontinue: false
+  3:
+    index: 3
+    point: {x: 0, y: 100, z: 0}
+    frame: odom
+    behavior: p2p
+    forward: true
+    autocontinue: false
+  4:
+    index: 4
+    point: {x: 0, y: 0, x: 0}
     frame: odom
     behavior: safety
     forward: none

@@ -61,7 +61,7 @@ void ScanBehavior::scanCB(const sensor_msgs::LaserScan& msg) {
     }
     auto point_num = cloud.points.size();
     for (int i = 0; i<point_num; i++) {
-      file<<cloud.points[i].x<<"|"<<cloud.points[i].y<<"|"<<cloud.points[i].z;
+      file<<"\""<<cloud.points[i].x<<","<<cloud.points[i].y<<","<<cloud.points[i].z<<"\"";
       if (i < point_num - 1) file<<",";
     }
     file<<std::endl;
@@ -123,9 +123,11 @@ void ScanBehavior::spin() {
       arrive_srv.request.waypoint2 = waypoints->waypoint2;
       arrive_client.call(arrive_srv);
 
-      if (arrive_srv.response.arrived.data == false) runHalt();  // If arrived at 2nd wp, stop
+      if (arrive_srv.response.arrived.data) runHalt();  // If arrived at 2nd wp, stop
       else {
         // Get twist msg from Pathing node, label, and publish
+        twist_srv.request.waypoint1 = waypoints->waypoint1;
+        twist_srv.request.waypoint2 = waypoints->waypoint2;
         twist_client.call(twist_srv);
         auto msg = state_controller::TwistLabeled();
         msg.label.data = label;
@@ -154,14 +156,6 @@ int ScanBehavior::runHalt() {
   else
     printf("Service call failed\n");
   return 0;
-
-  return 0;
-}
-
-bool ScanBehavior::arrivedAtPoint() {
-  // Compares current position to waypoint
-  if (1) return false;
-  else return true;
 }
 
 int main(int argc, char** argv) {

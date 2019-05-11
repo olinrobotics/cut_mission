@@ -20,8 +20,8 @@ class CutPlanner():
         # Initialize ros constructs and attributes, start service
 
         rospy.init_node('cut_planner')
-        self.service = rospy.Service('plan_bladepass', CutPlan, self.cutplan_call)
-        self.path_pub = rospy.Publisher('debug_path', Path, queue_size=0)
+        self.service = rospy.Service('cutPlan', CutPlan, self.cutplan_call)
+        self.path_pub = rospy.Publisher('/hitch_path', Path, queue_size=0)
         self.name = "cutplan"
         self.frame = 'map'
         self.file_location = None
@@ -57,8 +57,8 @@ class CutPlanner():
             """
         try:
             with open(file, 'r') as csvfile:
-                reader = csv.reader(csvfile, delimiter=",", quotechar="|")
-                string_data = [[string.split('|') for string in row] for row in reader] # Massive parsing step
+                reader = csv.reader(csvfile, delimiter=",", quotechar="\"")
+                string_data = [[string.split(',') for string in row] for row in reader] # Massive parsing step
                 self.data_raw = np.asarray(string_data, dtype=np.float64, order='C')
                 rospy.loginfo("%s - finished loading raw data", self.name)
                 return 0
@@ -176,7 +176,7 @@ class CutPlanner():
             @return ROS Path verified blade poses
             """
 
-        self.load_data(file_path)
+        if self.load_data(file_path): return
         self.filter_data()
         data_cut = np.zeros(shape=self.data_filtered.shape) - 1
         self.plan_cutsurface(data_cut)

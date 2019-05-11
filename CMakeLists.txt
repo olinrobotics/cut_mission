@@ -73,7 +73,7 @@ include_directories(
 )
 
 add_executable( ScanBehavior src/ScanBehavior/ScanBehavior.cpp )
-add_executable( CutBehavior src/CutBehavior/CutBehavior.cpp )
+add_executable( CutBehavior src/CutBehavior/CutBehavior.cpp src/CutBehavior/KdTree.cpp)
 
 target_link_libraries( ScanBehavior ${catkin_LIBRARIES} )
 target_link_libraries( CutBehavior ${catkin_LIBRARIES} )

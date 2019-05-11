@@ -1,5 +1,8 @@
 <launch>
 
+  <!-- If 1, launch file assumes Pathing is started separately -->
+  <arg name="included" default="0"/>
+
   <!-- http://wiki.ros.org/laser_assembler -->
   <node type="laser_scan_assembler" pkg="laser_assembler" name="pc_assembler">
     <!--<remap from="scan" to="tilt_scan"/>-->
@@ -7,7 +10,11 @@
     <param name="fixed_frame" type="string" value="odom" />
   </node>
 
-  <node pkg="cut_mission" type="Pathing.py" name="pathing"/>
+  <group unless="$(arg included)">
+
+    <node pkg="cut_mission" type="Pathing.py" name="pathing"/>
+
+  </group>
 
   <node pkg="cut_mission" type="ScanBehavior" name="scan_behavior" output="screen">
     <remap from="/waypoints" to="/mission_planner/cmd_waypoints"/>

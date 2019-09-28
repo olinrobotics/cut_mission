@@ -27,6 +27,7 @@ class MissionPlanner:
 
         # Set up mission
         time.sleep(0.5)
+        #TODO; Better error message.
         self.load_mission(rospy.get_param('/cut_mission/mission_file'))
         self.load_markers()
         print(self.markers)

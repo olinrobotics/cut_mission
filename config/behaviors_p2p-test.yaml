@@ -1,0 +1,5 @@
+# Behaviors used by mission_p2p
+
+/behaviors/p2p: '2'
+/behaviors/safety: '0'
+/behaviors/teleop: '1'

@@ -1,0 +1,19 @@
+<launch>
+    <!-- Loads p2p test mission behaviors, starts state controller and mission planner. -->
+
+    <!-- Load mission behaviors -->
+    <rosparam command="load" file="$(find cut_mission)/config/behaviors_p2p-test.yaml" />
+
+    <!-- Start state controller -->
+    <node pkg="state_controller" type="MainState" name="state_controller" output="screen" launch-prefix="gnome-terminal --command"/>
+
+    <!-- Load necessary behaviors -->
+    <include file="$(find cut_mission)/launch/behavior_p2p.launch"/>
+    <include file="$(find state_controller)/launch/teleop.launch"/>
+
+    <!-- Start mission planner -->
+    <node pkg="cut_mission" type="MissionPlanner.py" name="cut_mission" output="screen">
+      <param name="mission_file" value="$(find cut_mission)/config/mission_p2p-test.yaml"/>
+    </node>
+    
+</launch>

@@ -174,7 +174,8 @@ class MissionPlanner:
             @param[in] wp_index: index into waypoints attr for current waypoint
             '''
         msg = WaypointPairLabeled()
-        msg.label = self.behaviors[self.waypoints[wp_index].behavior.data]
+        rospy.loginfo(self.behaviors[self.waypoints[wp_index].behavior.data])
+        msg.label = int(self.behaviors[self.waypoints[wp_index].behavior.data])
         msg.waypoint1 = self.waypoints[wp_index]
         self.markers.markers[wp_index].color.g = 1.0
         self.markers.markers[wp_index].color.r = 0.0
@@ -186,6 +187,7 @@ class MissionPlanner:
         msg_state = String()
         msg_state.data = msg.waypoint1.behavior
         self.state_pub.publish(msg_state)
+        rospy.loginfo(msg)
         self.behavior_pub.publish(msg)
         self.curr_waypoint = msg
         return

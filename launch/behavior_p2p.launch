@@ -1,4 +1,6 @@
 <launch>
+    <!-- Launch P2P behavior and additional necessary Pathing node. -->
+
   <node pkg="cut_mission" type ="P2PBehavior.py" name="P2PBehavior" output="screen">
 
   </node>

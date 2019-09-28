@@ -1,0 +1,5 @@
+# Example of a behaviors_<mission-name>.yaml file with 3 behavior of descending priority.
+
+/behaviors/p2p: '2'
+/behaviors/safety: '0'
+/behaviors/teleop: '1'

@@ -1,0 +1,45 @@
+# Example mission_<mission-name>.yaml file with 5 waypoints.
+# This mission uses behaviors from behaviors_<mission-name>.yaml.
+
+# Source websites:
+# https://www.gamedev.net/articles/programming/engines-and-middleware/yaml-basics-and-parsing-with-yaml-cpp-r3508
+# http://ardupilot.org/copter/docs/common-planning-a-mission-with-waypoints-and-events.html
+# https://diydrones.com/forum/topics/waypoint-file-format
+
+title: ex
+waypoints:
+  0:
+    index: 0
+    point: {x: 0, y: 0, z: 0}
+    frame: odom
+    behavior: p2p
+    forward: true
+    autocontinue: false
+  1:
+    index: 1
+    point: {x: 100, y: 0, z: 0}
+    frame: odom
+    behavior: p2p
+    forward: true
+    autocontinue: false
+  2:
+    index: 2
+    point: {x: 100, y: 100, z: 0}
+    frame: odom
+    behavior: p2p
+    forward: true
+    autocontinue: false
+  3:
+    index: 3
+    point: {x: 0, y: 100, z: 0}
+    frame: odom
+    behavior: p2p
+    forward: true
+    autocontinue: false
+  4:
+    index: 4
+    point: {x: 0, y: 0, x: 0}
+    frame: odom
+    behavior: safety
+    forward: none
+    autocontinue: none

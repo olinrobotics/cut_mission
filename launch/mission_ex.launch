@@ -1,8 +1,12 @@
 <launch>
-    <!-- Load behaviors  -->
-    <!-- Note: check to make sure behaviors are up to date with mission file -->
+    <!-- Loads mission behaviors, starts state controller and mission planner. -->
+
+    <!-- Note: check to make sure behaviors in the .yaml file below are -->
+    <!-- up to date with mission file connected to this launch file. -->
     <!-- TODO @cnovak Make behaviors.yaml auto-update, prompt user for overwrite -->
-    <rosparam command="load" file="$(find cut_mission)/config/behaviors.yaml" />
+
+    <!-- Load necessary behaviors  -->
+    <rosparam command="load" file="$(find cut_mission)/config/behaviors_ex.yaml" />
 
     <!-- Start state controller -->
     <node pkg="state_controller" type="MainState" name="state_controller" output="screen" launch-prefix="gnome-terminal --command"/>
@@ -12,7 +16,7 @@
 
     <!-- Start mission planner -->
     <node pkg="cut_mission" type="MissionPlanner.py" name="cut_mission" output="screen">
-      <param name="mission_file" value="$(find cut_mission)/config/p2p_test.yaml"/>
+      <param name="mission_file" value="$(find cut_mission)/config/mission_ex.yaml"/>
     </node>
 
 </launch>

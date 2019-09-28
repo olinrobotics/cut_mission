@@ -3,7 +3,7 @@
 import rospy
 import yaml
 import time
-from std_msgs.msg import String, UInt8, Header
+from std_msgs.msg import String, UInt8, Header,Bool,Int8
 from visualization_msgs.msg import Marker, MarkerArray
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 
@@ -19,7 +19,7 @@ class MissionPlanner:
         # Set up ros stuff
         rospy.init_node('mission_planner')
         self.state_pub = rospy.Publisher('/state_controller/cmd_state', String, queue_size=1)
-        self.behavior_pub = rospy.Publisher('/mission_planner/out_behavior', WaypointPairLabeled, queue_size=1)
+        self.behavior_pub = rospy.Publisher('/waypoints', WaypointPairLabeled, queue_size=1)
         self.wpvis_pub = rospy.Publisher('/mission_planner/vis_waypoints', MarkerArray, queue_size=1)
         rospy.Subscriber('/mission_planner/in_behavior', String, self.in_behavior_cb)
         self.rate = rospy.Rate(1)
@@ -68,12 +68,12 @@ class MissionPlanner:
             for i in range(len(doc['waypoints'])):
                 msg = Waypoint()
                 msg.index = doc['waypoints'][i]['index']
-                msg.behavior = doc['waypoints'][i]['behavior']
-                msg.forward = bool(doc['waypoints'][i]['forward'])
-                msg.autocontinue = bool(doc['waypoints'][i]['autocontinue'])
-                msg.point.x = int(doc['waypoints'][i]['point']['x'])
-                msg.point.y = int(doc['waypoints'][i]['point']['y'])
-                msg.point.z = int(doc['waypoints'][i]['point']['z'])
+                msg.behavior = String(doc['waypoints'][i]['behavior'])
+                msg.forward = Bool(doc['waypoints'][i]['forward'])
+                msg.autocontinue = Bool(doc['waypoints'][i]['autocontinue'])
+                msg.point.x = Int8(doc['waypoints'][i]['point']['x'])
+                msg.point.y = Int8(doc['waypoints'][i]['point']['y'])
+                msg.point.z = Int8(doc['waypoints'][i]['point']['z'])
                 self.waypoints[i] = msg
                 rospy.loginfo("%s - Loaded waypoint %i", self.name, self.waypoints[i].index)
 
@@ -174,7 +174,7 @@ class MissionPlanner:
             @param[in] wp_index: index into waypoints attr for current waypoint
             '''
         msg = WaypointPairLabeled()
-        msg.label = self.behaviors[self.waypoints[wp_index].behavior]
+        msg.label = self.behaviors[self.waypoints[wp_index].behavior.data]
         msg.waypoint1 = self.waypoints[wp_index]
         self.markers.markers[wp_index].color.g = 1.0
         self.markers.markers[wp_index].color.r = 0.0

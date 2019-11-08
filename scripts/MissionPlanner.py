@@ -45,7 +45,7 @@ class MissionPlanner:
     def in_behavior_cb(self, msg):
         """ @brief end segment if reached wp is next in mission
             """
-        if msg.data == self.curr_waypoint.waypoint1.behavior:
+        if msg.data == self.curr_waypoint.waypoint1.behavior.data:
             self.next_behavior()
         else:
             rospy.logwarn("%s - Recieved incorrect waypoint", self.name)
@@ -184,9 +184,8 @@ class MissionPlanner:
             msg.waypoint2 = msg.waypoint1
         rospy.loginfo("%s - starting behavior: %s", self.name, msg.waypoint1.behavior)
         msg_state = String()
-        msg_state.data = msg.waypoint1.behavior
+        msg_state.data = msg.waypoint1.behavior.data
         self.state_pub.publish(msg_state)
-        rospy.loginfo(msg)
         self.behavior_pub.publish(msg)
         self.curr_waypoint = msg
         return

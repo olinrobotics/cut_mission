@@ -7,36 +7,36 @@ title: p2p_test
 waypoints:
   0:
     index: 0
-    point: {x: 0, y: 0, z: 0}
+    point: {x: 483236.462062, y: 6674528.45274, z: 0}
     frame: odom
     behavior: p2p
     forward: true
     autocontinue: false
   1:
     index: 1
-    point: {x: 100, y: 0, z: 0}
+    point: {x: 483246.462062, y: 6674528.45274, z: 0}
     frame: odom
     behavior: p2p
     forward: true
     autocontinue: false
   2:
     index: 2
-    point: {x: 100, y: 100, z: 0}
+    point: {x: 483256.462062, y: 6674528.45274, z: 0}
     frame: odom
     behavior: p2p
     forward: true
     autocontinue: false
   3:
     index: 3
-    point: {x: 0, y: 100, z: 0}
+    point: {x: 483266.462062, y: 6674528.45274, z: 0}
     frame: odom
     behavior: p2p
     forward: true
     autocontinue: false
   4:
     index: 4
-    point: {x: 0, y: 0, z: 0}
+    point: {x: 483276.462062, y: 6674528.45274, z: 0}
     frame: odom
     behavior: safety
-    forward: none
-    autocontinue: none
+    forward: true
+    autocontinue: false

@@ -30,6 +30,7 @@ class P2PBehavior:
         rospy.init_node('p2p_behavior')
         rospy.Subscriber("/waypoints", WaypointPairLabeled, self.waypointpair_cb)
         self.twist_pub = rospy.Publisher('/state_controller/cmd_behavior_twist', TwistLabeled, queue_size=1)
+        self.arrived_pub = rospy.Publisher('/mission_planner/in_behavior', String, queue_size=1)
         self.line_pub = rospy.Publisher('/line_vis', Marker, queue_size=10)
         self.end_pub = rospy.Publisher('/endpoint_vis', Marker, queue_size=10)
         self.start_pub = rospy.Publisher('/startpoint_vis', Marker, queue_size=10)  
@@ -41,7 +42,7 @@ class P2PBehavior:
         ''' @brief callback func for activating behavior
             @param msg[WaypointPairLabeled]: Waypoints for navigation
             '''
-        if msg.label == self.label:
+        if msg.waypoint1.behavior.data == self.label:
             if self.is_active:
                 rospy.logerr('P2PBehavior: Cannot execute new command, already running')
             else:
@@ -127,6 +128,7 @@ class P2PBehavior:
 
                 else:
                     self.reset_behavior()
+                    self.arrived_pub.publish(String("p2p"))
 
             self.rate.sleep()
 

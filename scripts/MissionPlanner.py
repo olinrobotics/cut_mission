@@ -3,7 +3,7 @@
 import rospy
 import yaml
 import time
-from std_msgs.msg import String, UInt8, Header
+from std_msgs.msg import String, UInt8, Header,Bool,Int8,Float64
 from visualization_msgs.msg import Marker, MarkerArray
 from cut_mission.msg import Waypoint, WaypointPairLabeled
 
@@ -19,7 +19,7 @@ class MissionPlanner:
         # Set up ros stuff
         rospy.init_node('mission_planner')
         self.state_pub = rospy.Publisher('/state_controller/cmd_state', String, queue_size=1)
-        self.behavior_pub = rospy.Publisher('/mission_planner/out_behavior', WaypointPairLabeled, queue_size=1)
+        self.behavior_pub = rospy.Publisher('/waypoints', WaypointPairLabeled, queue_size=1)
         self.wpvis_pub = rospy.Publisher('/mission_planner/vis_waypoints', MarkerArray, queue_size=1)
         rospy.Subscriber('/mission_planner/in_behavior', String, self.in_behavior_cb)
         self.rate = rospy.Rate(1)
@@ -27,6 +27,7 @@ class MissionPlanner:
 
         # Set up mission
         time.sleep(0.5)
+        #TODO; Better error message if paramaters are not loaded yet.
         self.load_mission(rospy.get_param('/cut_mission/mission_file'))
         self.load_markers()
         print(self.markers)
@@ -44,7 +45,7 @@ class MissionPlanner:
     def in_behavior_cb(self, msg):
         """ @brief end segment if reached wp is next in mission
             """
-        if msg.data == self.curr_waypoint.waypoint1.behavior:
+        if msg.data == self.curr_waypoint.waypoint1.behavior.data:
             self.next_behavior()
         else:
             rospy.logwarn("%s - Recieved incorrect waypoint", self.name)
@@ -67,12 +68,12 @@ class MissionPlanner:
             for i in range(len(doc['waypoints'])):
                 msg = Waypoint()
                 msg.index = doc['waypoints'][i]['index']
-                msg.behavior = doc['waypoints'][i]['behavior']
-                msg.forward = bool(doc['waypoints'][i]['forward'])
-                msg.autocontinue = bool(doc['waypoints'][i]['autocontinue'])
-                msg.point.x = int(doc['waypoints'][i]['point']['x'])
-                msg.point.y = int(doc['waypoints'][i]['point']['y'])
-                msg.point.z = int(doc['waypoints'][i]['point']['z'])
+                msg.behavior = String(doc['waypoints'][i]['behavior'])
+                msg.forward = Bool(doc['waypoints'][i]['forward'])
+                msg.autocontinue = Bool(doc['waypoints'][i]['autocontinue'])
+                msg.point.x = (doc['waypoints'][i]['point']['x'])
+                msg.point.y = (doc['waypoints'][i]['point']['y'])
+                msg.point.z = (doc['waypoints'][i]['point']['z'])
                 self.waypoints[i] = msg
                 rospy.loginfo("%s - Loaded waypoint %i", self.name, self.waypoints[i].index)
 
@@ -173,7 +174,7 @@ class MissionPlanner:
             @param[in] wp_index: index into waypoints attr for current waypoint
             '''
         msg = WaypointPairLabeled()
-        msg.label = self.behaviors[self.waypoints[wp_index].behavior]
+        msg.label = self.behaviors[self.waypoints[wp_index].behavior.data]
         msg.waypoint1 = self.waypoints[wp_index]
         self.markers.markers[wp_index].color.g = 1.0
         self.markers.markers[wp_index].color.r = 0.0
@@ -183,7 +184,7 @@ class MissionPlanner:
             msg.waypoint2 = msg.waypoint1
         rospy.loginfo("%s - starting behavior: %s", self.name, msg.waypoint1.behavior)
         msg_state = String()
-        msg_state.data = msg.waypoint1.behavior
+        msg_state.data = msg.waypoint1.behavior.data
         self.state_pub.publish(msg_state)
         self.behavior_pub.publish(msg)
         self.curr_waypoint = msg

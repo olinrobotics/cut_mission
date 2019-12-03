@@ -54,7 +54,6 @@ class Pathing():
 		if(newTwist.linear.x > self.speed):
 			newTwist.linear.x = self.speed
 		angle = math.atan2(vector[1], vector[0]) - self.angular[2]
-		# angle = angle / (math.pi / 4)
 		if(angle > math.pi):
 			angle = angle - 2*math.pi
 		elif(angle < -math.pi):

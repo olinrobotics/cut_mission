@@ -51,8 +51,8 @@ class P2PBehavior:
                 self.wp_2 = msg.waypoint2
                 self.is_active = True
         #Visualization
-        #if bool(rospy.get_param('~visualization','False')):
-        #    self.visualize()
+        if bool(rospy.get_param('~visualization','False')):
+           self.visualize()
         else:
             self.line_pub.publish(Marker())
             self.end_pub.publish(Marker())

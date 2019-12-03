@@ -1,42 +1,79 @@
-# Source websites:
-# https://www.gamedev.net/articles/programming/engines-and-middleware/yaml-basics-and-parsing-with-yaml-cpp-r3508
-# http://ardupilot.org/copter/docs/common-planning-a-mission-with-waypoints-and-events.html
-# https://diydrones.com/forum/topics/waypoint-file-format
-
 title: p2p_test
 waypoints:
-  0:
-    index: 0
-    point: {x: 483236.462062, y: 6674528.45274, z: 0}
-    frame: odom
-    behavior: p2p
-    forward: true
-    autocontinue: false
-  1:
-    index: 1
-    point: {x: 483246.462062, y: 6674528.45274, z: 0}
-    frame: odom
-    behavior: p2p
-    forward: true
-    autocontinue: false
-  2:
-    index: 2
-    point: {x: 483256.462062, y: 6674528.45274, z: 0}
-    frame: odom
-    behavior: p2p
-    forward: true
-    autocontinue: false
-  3:
-    index: 3
-    point: {x: 483266.462062, y: 6674528.45274, z: 0}
-    frame: odom
-    behavior: p2p
-    forward: true
-    autocontinue: false
-  4:
-    index: 4
-    point: {x: 483276.462062, y: 6674528.45274, z: 0}
-    frame: odom
-    behavior: safety
-    forward: true
-    autocontinue: false
+   0:
+       index: 0
+       point: {x: 313706.012659, y: 4684538.94977, z: 18.4563350615}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   1:
+       index: 1
+       point: {x: 313701.864129, y: 4684533.64169, z: 18.5123495069}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   2:
+       index: 2
+       point: {x: 313703.639898, y: 4684523.2234, z: 18.5919602545}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   3:
+       index: 3
+       point: {x: 313702.588172, y: 4684518.40453, z: 18.5962404562}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   4:
+       index: 4
+       point: {x: 313697.552306, y: 4684513.68345, z: 18.4434591456}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   5:
+       index: 5
+       point: {x: 313690.192709, y: 4684511.94707, z: 18.3312722225}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   6:
+       index: 6
+       point: {x: 313684.064138, y: 4684515.86171, z: 18.1548140398}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   7:
+       index: 7
+       point: {x: 313685.697201, y: 4684521.97653, z: 18.2530597199}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   8:
+       index: 8
+       point: {x: 313691.176929, y: 4684525.434, z: 18.3309159014}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   9:
+       index: 9
+       point: {x: 313698.191156, y: 4684530.47517, z: 18.4470396437}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   10:
+       index: 10
+       point: {x: 0, y: 0, z: 0}
+       frame: odom
+       behavior: safety
+       forward: false
+       autocontinue: false

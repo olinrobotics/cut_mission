@@ -1,0 +1,1346 @@
+title: p2p_test
+waypoints:
+   0:
+       index: 0
+       point: {x: 313705.469935, y: 4684538.26868, z: 18.4848649335}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   1:
+       index: 1
+       point: {x: 313705.166607, y: 4684538.02293, z: 18.4547678723}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   2:
+       index: 2
+       point: {x: 313704.89803, y: 4684537.76741, z: 18.4576299651}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   3:
+       index: 3
+       point: {x: 313704.564749, y: 4684537.46701, z: 18.4460288534}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   4:
+       index: 4
+       point: {x: 313704.348461, y: 4684537.24068, z: 18.454969991}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   5:
+       index: 5
+       point: {x: 313704.051483, y: 4684536.9546, z: 18.4448746866}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   6:
+       index: 6
+       point: {x: 313703.744365, y: 4684536.707, z: 18.4247722147}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   7:
+       index: 7
+       point: {x: 313703.457355, y: 4684536.45276, z: 18.403095736}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   8:
+       index: 8
+       point: {x: 313703.27188, y: 4684536.21707, z: 18.4014158015}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   9:
+       index: 9
+       point: {x: 313703.070203, y: 4684536.00836, z: 18.4068749582}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   10:
+       index: 10
+       point: {x: 313702.897365, y: 4684535.77269, z: 18.4177417734}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   11:
+       index: 11
+       point: {x: 313702.610372, y: 4684535.391, z: 18.422272165}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   12:
+       index: 12
+       point: {x: 313702.35362, y: 4684534.93058, z: 18.4223114552}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   13:
+       index: 13
+       point: {x: 313702.252169, y: 4684534.59796, z: 18.4723534586}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   14:
+       index: 14
+       point: {x: 313702.149637, y: 4684534.12489, z: 18.4944355445}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   15:
+       index: 15
+       point: {x: 313701.959948, y: 4684533.60844, z: 18.5019341168}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   16:
+       index: 16
+       point: {x: 313701.861573, y: 4684533.09102, z: 18.5146033021}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   17:
+       index: 17
+       point: {x: 313701.857328, y: 4684532.66918, z: 18.5036104559}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   18:
+       index: 18
+       point: {x: 313701.772343, y: 4684532.15257, z: 18.5102150249}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   19:
+       index: 19
+       point: {x: 313701.756601, y: 4684531.98127, z: 18.5126356529}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   20:
+       index: 20
+       point: {x: 313701.761543, y: 4684531.53271, z: 18.4947652229}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   21:
+       index: 21
+       point: {x: 313701.804629, y: 4684531.26872, z: 18.5217746883}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   22:
+       index: 22
+       point: {x: 313701.791153, y: 4684530.95316, z: 18.532058066}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   23:
+       index: 23
+       point: {x: 313701.864853, y: 4684530.51239, z: 18.5621045922}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   24:
+       index: 24
+       point: {x: 313701.922364, y: 4684530.27457, z: 18.5573443986}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   25:
+       index: 25
+       point: {x: 313702.087615, y: 4684529.9705, z: 18.5964758826}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   26:
+       index: 26
+       point: {x: 313702.098397, y: 4684529.69848, z: 18.6097882969}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   27:
+       index: 27
+       point: {x: 313702.350854, y: 4684529.41972, z: 18.6047104672}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   28:
+       index: 28
+       point: {x: 313702.382231, y: 4684529.14077, z: 18.5988507438}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   29:
+       index: 29
+       point: {x: 313702.374016, y: 4684528.77547, z: 18.6166500542}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   30:
+       index: 30
+       point: {x: 313702.294171, y: 4684528.53703, z: 18.6109419818}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   31:
+       index: 31
+       point: {x: 313702.278207, y: 4684528.19466, z: 18.6159694498}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   32:
+       index: 32
+       point: {x: 313702.422946, y: 4684527.9076, z: 18.6069900119}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   33:
+       index: 33
+       point: {x: 313702.418396, y: 4684527.50757, z: 18.590574447}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   34:
+       index: 34
+       point: {x: 313702.467585, y: 4684527.12484, z: 18.5973481245}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   35:
+       index: 35
+       point: {x: 313702.595775, y: 4684526.76208, z: 18.6076685885}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   36:
+       index: 36
+       point: {x: 313702.610829, y: 4684526.45385, z: 18.5689354945}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   37:
+       index: 37
+       point: {x: 313702.665149, y: 4684526.12061, z: 18.5548226573}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   38:
+       index: 38
+       point: {x: 313702.730704, y: 4684525.69898, z: 18.5777086875}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   39:
+       index: 39
+       point: {x: 313702.830053, y: 4684525.52375, z: 18.5698118859}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   40:
+       index: 40
+       point: {x: 313702.94544, y: 4684525.17996, z: 18.5926167309}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   41:
+       index: 41
+       point: {x: 313703.030918, y: 4684524.85273, z: 18.5845529561}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   42:
+       index: 42
+       point: {x: 313703.135722, y: 4684524.35838, z: 18.5482225925}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   43:
+       index: 43
+       point: {x: 313703.208315, y: 4684524.00253, z: 18.550450207}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   44:
+       index: 44
+       point: {x: 313703.289614, y: 4684523.49458, z: 18.572179408}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   45:
+       index: 45
+       point: {x: 313703.398168, y: 4684523.18282, z: 18.5664716038}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   46:
+       index: 46
+       point: {x: 313703.403836, y: 4684522.80618, z: 18.5561625217}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   47:
+       index: 47
+       point: {x: 313703.53807, y: 4684522.353, z: 18.5553009074}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   48:
+       index: 48
+       point: {x: 313703.471539, y: 4684521.93841, z: 18.5543328345}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   49:
+       index: 49
+       point: {x: 313703.483589, y: 4684521.62303, z: 18.5641455924}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   50:
+       index: 50
+       point: {x: 313703.418894, y: 4684521.26762, z: 18.5584718561}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   51:
+       index: 51
+       point: {x: 313703.520742, y: 4684520.86476, z: 18.5565656381}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   52:
+       index: 52
+       point: {x: 313703.396825, y: 4684520.51785, z: 18.5634821198}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   53:
+       index: 53
+       point: {x: 313703.260898, y: 4684520.15862, z: 18.5677636252}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   54:
+       index: 54
+       point: {x: 313703.142333, y: 4684519.81905, z: 18.5801501448}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   55:
+       index: 55
+       point: {x: 313703.041394, y: 4684519.51943, z: 18.583221898}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   56:
+       index: 56
+       point: {x: 313702.939132, y: 4684519.0712, z: 18.577034495}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   57:
+       index: 57
+       point: {x: 313702.756848, y: 4684518.82556, z: 18.6134520228}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   58:
+       index: 58
+       point: {x: 313702.656281, y: 4684518.40744, z: 18.5896995916}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   59:
+       index: 59
+       point: {x: 313702.472739, y: 4684518.10135, z: 18.5817547326}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   60:
+       index: 60
+       point: {x: 313702.190349, y: 4684517.77849, z: 18.5921967183}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   61:
+       index: 61
+       point: {x: 313701.896561, y: 4684517.24403, z: 18.5741850504}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   62:
+       index: 62
+       point: {x: 313701.793819, y: 4684516.83891, z: 18.6038359932}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   63:
+       index: 63
+       point: {x: 313701.494467, y: 4684516.64261, z: 18.587058159}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   64:
+       index: 64
+       point: {x: 313701.129978, y: 4684516.27991, z: 18.5782280857}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   65:
+       index: 65
+       point: {x: 313700.785427, y: 4684516.1427, z: 18.5886552846}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   66:
+       index: 66
+       point: {x: 313700.469449, y: 4684515.73462, z: 18.550599986}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   67:
+       index: 67
+       point: {x: 313700.246226, y: 4684515.47945, z: 18.5302415114}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   68:
+       index: 68
+       point: {x: 313699.849215, y: 4684515.12826, z: 18.5266155285}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   69:
+       index: 69
+       point: {x: 313699.614387, y: 4684514.99119, z: 18.5322922471}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   70:
+       index: 70
+       point: {x: 313699.221289, y: 4684514.77268, z: 18.5329045951}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   71:
+       index: 71
+       point: {x: 313698.829545, y: 4684514.54734, z: 18.4988296413}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   72:
+       index: 72
+       point: {x: 313698.685033, y: 4684514.20176, z: 18.4890087162}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   73:
+       index: 73
+       point: {x: 313698.368419, y: 4684514.05555, z: 18.4965972581}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   74:
+       index: 74
+       point: {x: 313697.947081, y: 4684513.93532, z: 18.4735793989}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   75:
+       index: 75
+       point: {x: 313697.788142, y: 4684513.69327, z: 18.4541523537}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   76:
+       index: 76
+       point: {x: 313697.541344, y: 4684513.52193, z: 18.471841135}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   77:
+       index: 77
+       point: {x: 313697.105643, y: 4684513.46046, z: 18.4473399018}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   78:
+       index: 78
+       point: {x: 313696.827771, y: 4684513.3625, z: 18.4264470349}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   79:
+       index: 79
+       point: {x: 313696.645693, y: 4684513.32684, z: 18.4137723325}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   80:
+       index: 80
+       point: {x: 313696.287323, y: 4684513.01677, z: 18.4334395279}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   81:
+       index: 81
+       point: {x: 313695.874006, y: 4684512.84852, z: 18.4013860475}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   82:
+       index: 82
+       point: {x: 313695.619988, y: 4684512.48253, z: 18.3995539137}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   83:
+       index: 83
+       point: {x: 313695.225852, y: 4684512.383, z: 18.3602292859}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   84:
+       index: 84
+       point: {x: 313694.878102, y: 4684512.31873, z: 18.3527992371}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   85:
+       index: 85
+       point: {x: 313694.59161, y: 4684512.26749, z: 18.3497815729}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   86:
+       index: 86
+       point: {x: 313694.230431, y: 4684512.27576, z: 18.3197788511}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   87:
+       index: 87
+       point: {x: 313693.886791, y: 4684512.32826, z: 18.3403738684}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   88:
+       index: 88
+       point: {x: 313693.565063, y: 4684512.24351, z: 18.3337096029}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   89:
+       index: 89
+       point: {x: 313693.124171, y: 4684512.20325, z: 18.3305607021}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   90:
+       index: 90
+       point: {x: 313692.806742, y: 4684512.11182, z: 18.3583983003}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   91:
+       index: 91
+       point: {x: 313692.457652, y: 4684512.11405, z: 18.3764044399}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   92:
+       index: 92
+       point: {x: 313692.115067, y: 4684512.19818, z: 18.37369447}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   93:
+       index: 93
+       point: {x: 313691.931983, y: 4684512.16101, z: 18.3558569087}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   94:
+       index: 94
+       point: {x: 313691.589544, y: 4684512.25782, z: 18.3085019123}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   95:
+       index: 95
+       point: {x: 313691.214596, y: 4684512.23952, z: 18.3575072188}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   96:
+       index: 96
+       point: {x: 313690.821265, y: 4684512.36095, z: 18.3522038463}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   97:
+       index: 97
+       point: {x: 313690.386048, y: 4684512.46482, z: 18.3723396955}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   98:
+       index: 98
+       point: {x: 313690.108804, y: 4684512.53053, z: 18.3233772856}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   99:
+       index: 99
+       point: {x: 313689.783441, y: 4684512.49719, z: 18.3445227382}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   100:
+       index: 100
+       point: {x: 313689.472221, y: 4684512.47564, z: 18.3381549133}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   101:
+       index: 101
+       point: {x: 313689.129249, y: 4684512.4797, z: 18.3416668174}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   102:
+       index: 102
+       point: {x: 313688.798563, y: 4684512.47087, z: 18.3277731653}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   103:
+       index: 103
+       point: {x: 313688.457212, y: 4684512.53749, z: 18.3226028369}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   104:
+       index: 104
+       point: {x: 313688.117935, y: 4684512.80573, z: 18.3331965056}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   105:
+       index: 105
+       point: {x: 313687.923056, y: 4684512.87664, z: 18.3059293213}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   106:
+       index: 106
+       point: {x: 313687.468034, y: 4684512.86868, z: 18.2892502995}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   107:
+       index: 107
+       point: {x: 313687.103558, y: 4684512.93246, z: 18.2847721794}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   108:
+       index: 108
+       point: {x: 313686.791574, y: 4684513.07067, z: 18.2501249067}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   109:
+       index: 109
+       point: {x: 313686.54832, y: 4684513.13281, z: 18.2620779999}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   110:
+       index: 110
+       point: {x: 313686.233029, y: 4684513.26516, z: 18.2405603475}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   111:
+       index: 111
+       point: {x: 313685.963407, y: 4684513.3886, z: 18.2224617804}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   112:
+       index: 112
+       point: {x: 313685.654259, y: 4684513.62562, z: 18.2144904195}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   113:
+       index: 113
+       point: {x: 313685.344197, y: 4684513.71834, z: 18.2219244659}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   114:
+       index: 114
+       point: {x: 313685.010068, y: 4684513.80575, z: 18.2213732532}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   115:
+       index: 115
+       point: {x: 313684.793899, y: 4684514.07092, z: 18.2124790186}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   116:
+       index: 116
+       point: {x: 313684.572474, y: 4684514.31655, z: 18.2161606669}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   117:
+       index: 117
+       point: {x: 313684.31972, y: 4684514.49086, z: 18.2071491889}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   118:
+       index: 118
+       point: {x: 313684.242937, y: 4684514.74568, z: 18.1960034426}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   119:
+       index: 119
+       point: {x: 313683.978471, y: 4684514.98245, z: 18.1788396703}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   120:
+       index: 120
+       point: {x: 313683.768745, y: 4684515.23477, z: 18.1596032535}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   121:
+       index: 121
+       point: {x: 313683.589868, y: 4684515.51812, z: 18.1267478358}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   122:
+       index: 122
+       point: {x: 313683.43463, y: 4684515.72389, z: 18.1281027883}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   123:
+       index: 123
+       point: {x: 313683.287241, y: 4684516.0595, z: 18.1281922459}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   124:
+       index: 124
+       point: {x: 313683.116064, y: 4684516.3304, z: 18.111888483}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   125:
+       index: 125
+       point: {x: 313682.951104, y: 4684516.74417, z: 18.1129703832}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   126:
+       index: 126
+       point: {x: 313682.981624, y: 4684517.01661, z: 18.1238693088}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   127:
+       index: 127
+       point: {x: 313682.885165, y: 4684517.25149, z: 18.1209521375}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   128:
+       index: 128
+       point: {x: 313682.872864, y: 4684517.51989, z: 18.1517438281}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   129:
+       index: 129
+       point: {x: 313682.84767, y: 4684517.87911, z: 18.115251083}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   130:
+       index: 130
+       point: {x: 313682.838439, y: 4684518.1417, z: 18.1161475387}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   131:
+       index: 131
+       point: {x: 313682.853944, y: 4684518.54895, z: 18.1527335336}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   132:
+       index: 132
+       point: {x: 313682.764307, y: 4684518.92813, z: 18.1788549028}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   133:
+       index: 133
+       point: {x: 313682.919284, y: 4684519.19328, z: 18.2063983199}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   134:
+       index: 134
+       point: {x: 313683.021707, y: 4684519.52104, z: 18.2168936823}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   135:
+       index: 135
+       point: {x: 313683.134838, y: 4684519.82881, z: 18.2032321258}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   136:
+       index: 136
+       point: {x: 313683.258656, y: 4684520.09631, z: 18.226691841}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   137:
+       index: 137
+       point: {x: 313683.422771, y: 4684520.41637, z: 18.241375338}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   138:
+       index: 138
+       point: {x: 313683.592611, y: 4684520.73395, z: 18.2536114552}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   139:
+       index: 139
+       point: {x: 313683.790304, y: 4684520.97396, z: 18.252844034}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   140:
+       index: 140
+       point: {x: 313684.037662, y: 4684521.26194, z: 18.2676842027}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   141:
+       index: 141
+       point: {x: 313684.356823, y: 4684521.5521, z: 18.2782345293}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   142:
+       index: 142
+       point: {x: 313684.550402, y: 4684521.70475, z: 18.2801581895}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   143:
+       index: 143
+       point: {x: 313684.740138, y: 4684521.93831, z: 18.268305562}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   144:
+       index: 144
+       point: {x: 313685.018046, y: 4684522.1378, z: 18.2512361048}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   145:
+       index: 145
+       point: {x: 313685.335994, y: 4684522.18987, z: 18.2666135804}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   146:
+       index: 146
+       point: {x: 313685.731687, y: 4684522.44133, z: 18.2994039925}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   147:
+       index: 147
+       point: {x: 313686.052389, y: 4684522.60833, z: 18.3157831828}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   148:
+       index: 148
+       point: {x: 313686.515756, y: 4684522.80897, z: 18.347984433}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   149:
+       index: 149
+       point: {x: 313686.901322, y: 4684522.95128, z: 18.3632938803}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   150:
+       index: 150
+       point: {x: 313687.230628, y: 4684523.11755, z: 18.3519605071}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   151:
+       index: 151
+       point: {x: 313687.551875, y: 4684523.32515, z: 18.3432518802}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   152:
+       index: 152
+       point: {x: 313687.859538, y: 4684523.52657, z: 18.3477631882}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   153:
+       index: 153
+       point: {x: 313688.157232, y: 4684523.71633, z: 18.3106883698}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   154:
+       index: 154
+       point: {x: 313688.501863, y: 4684523.8624, z: 18.3451470474}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   155:
+       index: 155
+       point: {x: 313688.818094, y: 4684524.07449, z: 18.3128083029}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   156:
+       index: 156
+       point: {x: 313689.260591, y: 4684524.3196, z: 18.3611907067}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   157:
+       index: 157
+       point: {x: 313689.591478, y: 4684524.4786, z: 18.3630045944}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   158:
+       index: 158
+       point: {x: 313689.96909, y: 4684524.79847, z: 18.3461123865}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   159:
+       index: 159
+       point: {x: 313690.185953, y: 4684524.9251, z: 18.3524831662}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   160:
+       index: 160
+       point: {x: 313690.456092, y: 4684525.15454, z: 18.3262363768}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   161:
+       index: 161
+       point: {x: 313690.763979, y: 4684525.34828, z: 18.3477830101}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   162:
+       index: 162
+       point: {x: 313691.063504, y: 4684525.54532, z: 18.3453810004}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   163:
+       index: 163
+       point: {x: 313691.367794, y: 4684525.7308, z: 18.3554751778}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   164:
+       index: 164
+       point: {x: 313691.697073, y: 4684525.89857, z: 18.353923801}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   165:
+       index: 165
+       point: {x: 313692.026424, y: 4684526.07187, z: 18.3729070391}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   166:
+       index: 166
+       point: {x: 313692.482377, y: 4684526.29927, z: 18.3888369315}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   167:
+       index: 167
+       point: {x: 313692.801587, y: 4684526.45145, z: 18.3802125402}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   168:
+       index: 168
+       point: {x: 313693.128453, y: 4684526.66421, z: 18.385569337}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   169:
+       index: 169
+       point: {x: 313693.531852, y: 4684526.89246, z: 18.3838424631}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   170:
+       index: 170
+       point: {x: 313693.861494, y: 4684527.08971, z: 18.4000521283}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   171:
+       index: 171
+       point: {x: 313694.176662, y: 4684527.30356, z: 18.4081103053}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   172:
+       index: 172
+       point: {x: 313694.471332, y: 4684527.54105, z: 18.4109924591}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   173:
+       index: 173
+       point: {x: 313694.866382, y: 4684527.87711, z: 18.4063984597}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   174:
+       index: 174
+       point: {x: 313695.176238, y: 4684528.09114, z: 18.4084977468}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   175:
+       index: 175
+       point: {x: 313695.438928, y: 4684528.35562, z: 18.4158407304}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   176:
+       index: 176
+       point: {x: 313695.737049, y: 4684528.57312, z: 18.4111258357}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   177:
+       index: 177
+       point: {x: 313696.070655, y: 4684528.9281, z: 18.416001503}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   178:
+       index: 178
+       point: {x: 313696.342679, y: 4684529.17286, z: 18.4238538431}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   179:
+       index: 179
+       point: {x: 313696.716981, y: 4684529.4965, z: 18.4189696442}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   180:
+       index: 180
+       point: {x: 313697.026706, y: 4684529.69409, z: 18.4291563652}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   181:
+       index: 181
+       point: {x: 313697.466914, y: 4684529.89895, z: 18.4496749465}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   182:
+       index: 182
+       point: {x: 313697.82315, y: 4684529.99811, z: 18.4561009815}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   183:
+       index: 183
+       point: {x: 313698.450762, y: 4684530.12071, z: 18.462972128}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   184:
+       index: 184
+       point: {x: 313698.788792, y: 4684530.19587, z: 18.4814597332}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   185:
+       index: 185
+       point: {x: 313699.248209, y: 4684530.12219, z: 18.4932855071}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   186:
+       index: 186
+       point: {x: 313699.694578, y: 4684529.99468, z: 18.4796212161}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   187:
+       index: 187
+       point: {x: 313699.966386, y: 4684529.85966, z: 18.4912751704}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   188:
+       index: 188
+       point: {x: 313700.403085, y: 4684529.64514, z: 18.5441272025}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   189:
+       index: 189
+       point: {x: 313700.843027, y: 4684529.36743, z: 18.559296522}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   190:
+       index: 190
+       point: {x: 313700.941844, y: 4684529.20336, z: 18.5672060219}
+       frame: odom
+       behavior: p2p
+       forward: true
+       autocontinue: false
+   191:
+       index: 191
+       point: {x: 0, y: 0, z: 0}
+       frame: odom
+       behavior: safety
+       forward: none
+       autocontinue: none
